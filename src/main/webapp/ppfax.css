@@ -1,0 +1,95 @@
+body, input, td, th {
+  font-family : Verdana, Arial, sans-serif;
+  font-size : 9pt;
+}
+
+h1 {
+	margin: 2px 0;
+}
+
+table, th, td {
+	border: 0;
+	border-collapse: collapse;
+	text-align: left;
+	vertical-align: top;
+}
+
+table.grid, table.grid>thead>tr>th, table.grid>tbody>tr>th, table.grid>tbody>tr>td {
+	border-bottom: 1px solid #ddd;
+	border-left: 1px solid #ddd;
+	padding: 2px;
+}
+
+table.grid>thead>tr>th, table.grid>tbody>tr>th {
+	vertical-align: bottom;
+}
+
+table.head {
+	width: 100%;
+	border-spacing: 0;
+	border: 2px solid #ff0;
+}
+table.head td {
+	vertical-align: bottom;
+	background-color: #ffa;
+	padding: 4px 2px;
+}
+table.head td.username {
+	text-align: right;
+}
+
+table.jobdetail {
+	width: 100%;
+	padding: 0;
+}
+
+table.jobdetail>tbody>tr>th {
+	padding: 0;
+}
+
+table.jobdetail>tbody>tr>td {
+	color: #888;
+	font-size: 8pt;
+	font-weight: normal;
+	width: 50%;
+}
+
+form {
+	margin: 0;
+	padding: 0;
+}
+input[type=text],
+input[type=password],
+textarea {
+	border: 1px solid #ddd;
+}
+input[type=text]:focus,
+input[type=password]:focus,
+textarea:focus {
+  background-color: #ffa;
+}
+input[type=button],
+input[type=submit] {
+  border: 1px solid #000;
+  border-radius: 25px;
+}
+
+div {
+	border: 1px solid #ddd;
+	margin: 2px;
+	padding: 2px;
+}
+
+span.bigtime {
+	font-size: 20pt;
+}
+
+span.mhl {
+	font-size: 8pt;
+	font-weight: bold;
+	color: #666;
+}
+
+.clear {
+  clear: both;
+}

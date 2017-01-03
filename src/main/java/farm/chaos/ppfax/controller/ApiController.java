@@ -12,30 +12,22 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Application;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.SecurityContext;
 
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 
 import farm.chaos.ppfax.model.Article;
-import farm.chaos.ppfax.model.PpUser;
 import farm.chaos.ppfax.model.PublicationStatus;
-import farm.chaos.ppfax.model.UserRole;
 import farm.chaos.ppfax.persistance.Datastore;
-import farm.chaos.ppfax.security.Secured;
-import farm.chaos.ppfax.security.SsoHelper;
 import farm.chaos.ppfax.utils.StringUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.Authorization;
 
 
 @Api
-@Secured
 @Path("v1")
 public class ApiController extends Application {
 
@@ -44,17 +36,14 @@ public class ApiController extends Application {
 	public ApiController() { }
 
     @GET
-    @ApiOperation(value = "get article", response = Response.class, authorizations = {@Authorization(value = "Bearer")})
+    @ApiOperation(value = "get article", response = Response.class)
     @Path("/article/{articleId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getArticle(@PathParam("articleId") String articleId,
-    		@Context SecurityContext securityContext) {
+    public Response getArticle(@PathParam("articleId") String articleId) {
 
 	    UserService userService = UserServiceFactory.getUserService();
 	    User user = userService.getCurrentUser();
 	    LOG.log(Level.INFO, "User " + user.getUserId() + " - " + user.getEmail());
-
-    	SsoHelper.checkUserAccess(UserRole.EDITOR, securityContext, "getArticle");
 
     	long id = StringUtils.atol(articleId);
     	Article a = Datastore.getArticle(id);
@@ -65,30 +54,25 @@ public class ApiController extends Application {
     }
 
     @POST
-    @Secured
-    @ApiOperation(value = "update article", response = Response.class, authorizations = {@Authorization(value = "Bearer")})
+    @ApiOperation(value = "update article", response = Response.class)
     @Path("/article/{articleId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateArticle(
-    		Article article,
-    		@Context SecurityContext securityContext) {
+    public Response updateArticle(Article article) {
 
 	    UserService userService = UserServiceFactory.getUserService();
 	    User user = userService.getCurrentUser();
 	    LOG.log(Level.INFO, "User " + user.getUserId() + " - " + user.getEmail());
 
-    	SsoHelper.checkUserAccess(UserRole.EDITOR, securityContext, "updateArticle");
+//    	SsoHelper.checkUserAccess(UserRole.EDITOR, securityContext, "updateArticle");
 
     	Article existing = Datastore.getArticle(article.getId());
     	if (existing == null)
     		return Response.status(Response.Status.NOT_FOUND).build();
 
-    	PpUser ppfaxUser = new PpUser();
+//    	if (existing.getAuthorId() != ppfaxUser.getId())
+//        	SsoHelper.checkUserAccess(UserRole.MANAGER, securityContext, "updateArticle");
 
-    	if (existing.getAuthorId() != ppfaxUser.getId())
-        	SsoHelper.checkUserAccess(UserRole.MANAGER, securityContext, "updateArticle");
-
-    	// update existing
+    	// update dedicated fields
     	existing.setHeadline(article.getHeadline());
     	existing.setTitle(article.getTitle());
     	existing.setTeasertext(article.getTeasertext());
@@ -104,26 +88,24 @@ public class ApiController extends Application {
     }
 
     @DELETE
-    @Secured
-    @ApiOperation(value = "delete article", response = Response.class, authorizations = {@Authorization(value = "Bearer")})
+    @ApiOperation(value = "delete article", response = Response.class)
     @Path("/article/{articleId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response deleteArticle(@PathParam("articleId") String articleId,
-    		@Context SecurityContext securityContext) {
+    public Response deleteArticle(@PathParam("articleId") String articleId) {
 
 	    UserService userService = UserServiceFactory.getUserService();
 	    User user = userService.getCurrentUser();
 	    LOG.log(Level.INFO, "User " + user.getUserId() + " - " + user.getEmail());
 
-    	SsoHelper.checkUserAccess(UserRole.MANAGER, securityContext, "deleteArticle");
-
     	long id = StringUtils.atol(articleId);
     	Article article = Datastore.getArticle(id);
 
-    	if (article == null) return Response.status(Response.Status.NOT_FOUND).build();
-    	article.setStatus(PublicationStatus.DELETED);
+    	if (article == null)
+    		return Response.status(Response.Status.NOT_FOUND).build();
 
+    	article.setStatus(PublicationStatus.DELETED);
     	Datastore.saveArticle(article);
+
     	return Response.ok().build();
     }
 

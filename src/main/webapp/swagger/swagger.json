@@ -1,0 +1,123 @@
+{
+  "swagger" : "2.0",
+  "info" : {
+    "version" : "1.0",
+    "title" : "PPFax CMS"
+  },
+  "host" : "localhost:8080",
+  "basePath" : "/api",
+  "schemes" : [ "http", "https" ],
+  "paths" : {
+    "/v1/article/{articleId}" : {
+      "get" : {
+        "summary" : "get article",
+        "description" : "",
+        "operationId" : "getArticle",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "articleId",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "default" : {
+            "description" : "successful operation"
+          }
+        },
+        "security" : [ {
+          "Bearer" : [ ]
+        } ]
+      },
+      "post" : {
+        "summary" : "update article",
+        "description" : "",
+        "operationId" : "updateArticle",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/Article"
+          }
+        } ],
+        "responses" : {
+          "default" : {
+            "description" : "successful operation"
+          }
+        },
+        "security" : [ {
+          "Bearer" : [ ]
+        } ]
+      },
+      "delete" : {
+        "summary" : "delete article",
+        "description" : "",
+        "operationId" : "deleteArticle",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "articleId",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "default" : {
+            "description" : "successful operation"
+          }
+        },
+        "security" : [ {
+          "Bearer" : [ ]
+        } ]
+      }
+    }
+  },
+  "definitions" : {
+    "Article" : {
+      "type" : "object",
+      "properties" : {
+        "id" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "categoryId" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "title" : {
+          "type" : "string"
+        },
+        "headline" : {
+          "type" : "string"
+        },
+        "teasertext" : {
+          "type" : "string"
+        },
+        "dateCreated" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "dateModified" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "datePublished" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "keywords" : {
+          "type" : "string"
+        },
+        "authorId" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "status" : {
+          "type" : "string",
+          "enum" : [ "OFFLINE", "ONLINE", "DELETED" ]
+        }
+      }
+    }
+  }
+}

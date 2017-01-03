@@ -262,7 +262,7 @@
                         <apiSources>
                             <apiSource>
                                 <springmvc>false</springmvc>
-                                <locations>com.tiekinetix.flow.cronmanager.controller</locations>
+                                <locations>farm.chaos.ppfax.controller</locations>
                                 <schemes>http,https</schemes>
 <!-- 
                                 <host>localhost:8888</host>

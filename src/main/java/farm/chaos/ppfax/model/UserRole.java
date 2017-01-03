@@ -1,13 +1,14 @@
-package farm.chaos.ppfax.security;
+package farm.chaos.ppfax.model;
 
-public enum PpfaxUserRole {
+public enum UserRole {
 
+	READER("Reader"),
 	EDITOR("Editor"),
 	MANAGER("Manager"),
 	ADMIN("Administrator");
 
 	private String role;
-	PpfaxUserRole(String r) {
+	UserRole(String r) {
 		role = r;
 	}
 
@@ -15,8 +16,8 @@ public enum PpfaxUserRole {
 		return role;
 	}
 
-	public static PpfaxUserRole getInstanceByValue(String s) {
-		for (PpfaxUserRole r : values())
+	public static UserRole getInstanceByValue(String s) {
+		for (UserRole r : values())
 			if (r.role.equals(s)) return r;
 		return null;
 	}

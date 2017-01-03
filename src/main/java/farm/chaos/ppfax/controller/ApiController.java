@@ -1,6 +1,8 @@
 package farm.chaos.ppfax.controller;
 
 import java.net.URI;
+import java.util.Date;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.ws.rs.DELETE;
@@ -15,9 +17,15 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 
-import farm.chaos.ppfax.model.Cronjob;
+import com.google.appengine.api.users.User;
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
+
+import farm.chaos.ppfax.model.Article;
+import farm.chaos.ppfax.model.PpUser;
+import farm.chaos.ppfax.model.PublicationStatus;
+import farm.chaos.ppfax.model.UserRole;
 import farm.chaos.ppfax.persistance.Datastore;
-import farm.chaos.ppfax.security.PpfaxUserRole;
 import farm.chaos.ppfax.security.Secured;
 import farm.chaos.ppfax.security.SsoHelper;
 import farm.chaos.ppfax.utils.StringUtils;
@@ -42,14 +50,18 @@ public class ApiController extends Application {
     public Response getArticle(@PathParam("articleId") String articleId,
     		@Context SecurityContext securityContext) {
 
-    	SsoHelper.checkUserAccess(PpfaxUserRole.EDITOR, securityContext, "getArticle");
+	    UserService userService = UserServiceFactory.getUserService();
+	    User user = userService.getCurrentUser();
+	    LOG.log(Level.INFO, "User " + user.getUserId() + " - " + user.getEmail());
+
+    	SsoHelper.checkUserAccess(UserRole.EDITOR, securityContext, "getArticle");
 
     	long id = StringUtils.atol(articleId);
-    	Cronjob j = Datastore.getCronjob(id);
+    	Article a = Datastore.getArticle(id);
 
-    	if (j == null) return Response.status(Response.Status.NOT_FOUND).build();
+    	if (a == null) return Response.status(Response.Status.NOT_FOUND).build();
 
-    	return Response.ok().entity(j).build();
+    	return Response.ok().entity(a).build();
     }
 
     @POST
@@ -58,18 +70,35 @@ public class ApiController extends Application {
     @Path("/article/{articleId}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response updateArticle(
-    		Cronjob job,
+    		Article article,
     		@Context SecurityContext securityContext) {
 
-    	SsoHelper.checkUserAccess(PpfaxUserRole.EDITOR, securityContext, "getArticle");
+	    UserService userService = UserServiceFactory.getUserService();
+	    User user = userService.getCurrentUser();
+	    LOG.log(Level.INFO, "User " + user.getUserId() + " - " + user.getEmail());
 
-    	Cronjob existing = Datastore.getCronjob(job.getId());
+    	SsoHelper.checkUserAccess(UserRole.EDITOR, securityContext, "updateArticle");
+
+    	Article existing = Datastore.getArticle(article.getId());
     	if (existing == null)
     		return Response.status(Response.Status.NOT_FOUND).build();
 
-    	// TODO: update existing
+    	PpUser ppfaxUser = new PpUser();
 
-    	Datastore.saveCronjob(existing);
+    	if (existing.getAuthorId() != ppfaxUser.getId())
+        	SsoHelper.checkUserAccess(UserRole.MANAGER, securityContext, "updateArticle");
+
+    	// update existing
+    	existing.setHeadline(article.getHeadline());
+    	existing.setTitle(article.getTitle());
+    	existing.setTeasertext(article.getTeasertext());
+    	existing.setKeywords(article.getKeywords());
+    	existing.setStatus(article.getStatus());
+    	existing.setCategoryId(article.getCategoryId());
+
+    	existing.setDateModified(new Date());
+
+    	Datastore.saveArticle(existing);
         URI uri = URI.create("/v1/article/" + existing.getId());
     	return Response.created(uri).entity(existing).build();
     }
@@ -79,17 +108,22 @@ public class ApiController extends Application {
     @ApiOperation(value = "delete article", response = Response.class, authorizations = {@Authorization(value = "Bearer")})
     @Path("/article/{articleId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response deleteJob(@PathParam("articleId") String articleId,
+    public Response deleteArticle(@PathParam("articleId") String articleId,
     		@Context SecurityContext securityContext) {
 
-    	SsoHelper.checkUserAccess(PpfaxUserRole.MANAGER, securityContext, "getArticle");
+	    UserService userService = UserServiceFactory.getUserService();
+	    User user = userService.getCurrentUser();
+	    LOG.log(Level.INFO, "User " + user.getUserId() + " - " + user.getEmail());
+
+    	SsoHelper.checkUserAccess(UserRole.MANAGER, securityContext, "deleteArticle");
 
     	long id = StringUtils.atol(articleId);
-    	Cronjob j = Datastore.getCronjob(id);
+    	Article article = Datastore.getArticle(id);
 
-    	if (j == null) return Response.status(Response.Status.NOT_FOUND).build();
+    	if (article == null) return Response.status(Response.Status.NOT_FOUND).build();
+    	article.setStatus(PublicationStatus.DELETED);
 
-    	Datastore.deleteCronjob(id);
+    	Datastore.saveArticle(article);
     	return Response.ok().build();
     }
 

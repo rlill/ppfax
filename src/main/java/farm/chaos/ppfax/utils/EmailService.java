@@ -15,13 +15,11 @@ import javax.mail.internet.MimeMultipart;
 
 import com.google.apphosting.api.ApiProxy;
 
-import farm.chaos.ppfax.model.Cronjob;
-
 public class EmailService {
 
 	private static final Logger LOG = Logger.getLogger(EmailService.class.getName());
 
-	public static void sendEmail(Cronjob j, String message) {
+	public static void sendEmail(String message, String address) {
 
 		Properties props = new Properties();
 		Session session = Session.getDefaultInstance(props, null);
@@ -30,12 +28,7 @@ public class EmailService {
 			Message msg = new MimeMessage(session);
 
 			String htmlBody = "<html><body><h1>FLOW Cron Manager Error Report</h1>"
-					+ "<dl><dt>ID</dt><dd>" + j.getId() + "</dd>"
-					+ "<dt>Command</dt><dd>" + j.getCommand() + "</dd>"
-					+ "<dt>AppId</dt><dd>" + j.getAppId() + "</dd>"
-					+ "<dt>VendorId</dt><dd>" + j.getVendorId() + "</dd>"
-					+ "<dt>last run</dt><dd>" + j.getLastRun() + "</dd>"
-					+ "<dt>Message</dt><dd>" + message + "</dd>"
+					+ "<dl><dt>Message</dt><dd>" + message + "</dd>"
 					+ "</dl></body></html>";
 			Multipart mp = new MimeMultipart();
 
@@ -53,10 +46,10 @@ public class EmailService {
 	        LOG.log(Level.FINE, "APP ID " + appid);
 
 			msg.setFrom(new InternetAddress("no-reply@" + appid + ".appspotmail.com", "FLOW Cron Manager"));
-			msg.addRecipient(Message.RecipientType.TO, new InternetAddress(j.getNotification()));
-			msg.setSubject("Notification for cronjob " + j.getId());
+			msg.addRecipient(Message.RecipientType.TO, new InternetAddress(address));
+			msg.setSubject("Notification");
 			Transport.send(msg);
-			LOG.log(Level.INFO, "Email sent to " + j.getNotification());
+			LOG.log(Level.INFO, "Email sent to " + address);
 
 		} catch (Exception e) {
 			LOG.log(Level.SEVERE, "Failed to send email: " + e.getMessage(), e);

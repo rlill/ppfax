@@ -1,0 +1,83 @@
+PPFax
+=====
+Simple Web-CMS for AppEngine
+Support of SEO-Features
+
+
+Users:
+------
+everyone - read published articles, overview pages
+logged in (Google account) - have role assigned
+
+Roles:
+READER: read-only access, all categories, articles, images
+EDITOR: create, publish, modify, delete own articles
+MANAGER: create, publish, modify, delete all articles and categories
+ADMIN: <manager> + manage users
+
+GCP Project admin is always ppfax-admin
+
+Content-Types:
+--------------
+o category
+- id
+- name
+- path
+- parent
+- meta-keywords
+- published
+- sidebarcontent
+
+o article
+- id
+- categoryId
+- title
+- headline
+- teasertext
+- date created
+- date modified
+- date published
+- meta-keywords
+- author
+- status (offline, online, deleted)
+
+o paragraph
+- id
+- articleId
+- order
+- headline
+- imageId
+- style (layout with image)
+- body text
+
+o image
+- id
+- title
+- storage path (GCS)
+- copyright
+- date created
+- author
+- status (offline, online, deleted)
+
+
+Image-Daemon
+------------
+Original is stored in GCS
+File-ID: YYMMDDHHMMSSXXXR
+(XXX = serial number, R = Rendition)
+Renditions:
+0 = original (not public !?)
+1 = wide
+2 = in-text
+3 = ...
+
+New renditions are rendered on-the-fly and stored in GCS.
+Next time they can be read from GCS.
+
+
+Sitemaps
+--------
+standard (all articles)
+news (newest)
+image (all images)
+

@@ -6,11 +6,13 @@ import java.util.logging.Logger;
 import javax.ws.rs.NotAuthorizedException;
 import javax.ws.rs.core.SecurityContext;
 
+import farm.chaos.ppfax.model.UserRole;
+
 public class SsoHelper {
 
 	private static final Logger LOG = Logger.getLogger(SsoHelper.class.getName());
 
-	public static void checkUserAccess(PpfaxUserRole role, SecurityContext securityContext, String method) {
+	public static void checkUserAccess(UserRole role, SecurityContext securityContext, String method) {
 
 		final PpfaxPrincipal principal = (PpfaxPrincipal) securityContext.getUserPrincipal();
 		final String vendorIdFromSSO = principal.getCustomerName();

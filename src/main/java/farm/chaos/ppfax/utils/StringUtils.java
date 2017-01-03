@@ -26,4 +26,8 @@ public class StringUtils {
 		return result;
 	}
 
+	public static boolean atob(String s) {
+		return (s != null && (s.equals("1") || s.equalsIgnoreCase("true") || s.equalsIgnoreCase("yes")));
+	}
+
 }

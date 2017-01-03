@@ -1,8 +1,6 @@
 package farm.chaos.ppfax.persistance;
 
-import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -10,77 +8,66 @@ import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.memcache.ErrorHandlers;
 import com.google.appengine.api.memcache.MemcacheService;
 import com.google.appengine.api.memcache.MemcacheServiceFactory;
+import com.googlecode.objectify.cmd.Query;
 
-import farm.chaos.ppfax.model.CronLogLevel;
-import farm.chaos.ppfax.model.Cronjob;
-import farm.chaos.ppfax.model.LogEntry;
+import farm.chaos.ppfax.model.Article;
+import farm.chaos.ppfax.model.PpUser;
 
 public class Datastore {
 
 	private static final Logger LOG = Logger.getLogger(Datastore.class.getName());
 
-	private static final String KEY_SECRET_TOKEN = "SECRET_TOKEN";
-
 	private static MemcacheService syncCache;
+
 	static {
     	NamespaceManager.set(null);
         syncCache = MemcacheServiceFactory.getMemcacheService();
         syncCache.setErrorHandler(ErrorHandlers.getConsistentLogAndContinue(Level.INFO));
 	}
 
-	public static List<Cronjob> getAllCronjobs() {
-		LOG.log(Level.FINE, "Retrieve all cronjobs");
-		return FeederObjectifyService.ofy().load().type(Cronjob.class).list();
+	// Users
+	public static List<PpUser> getPpfaxUsers(String searchterm, int offset, int limit) {
+		LOG.log(Level.FINE, "Retrieve all users");
+		return FeederObjectifyService.ofy().load().type(PpUser.class).offset(offset).limit(limit).list();
 	}
 
-	public static List<Cronjob> getAllCronjobs(String appId, String vendorId) {
-		LOG.log(Level.FINE, "Retrieve all cronjobs");
-		return FeederObjectifyService.ofy().load().type(Cronjob.class).filter("appId", appId).filter("vendorId", vendorId).list();
+	public static PpUser getPpfaxUser(long id) {
+		LOG.log(Level.FINE, "Retrieve user id=" + id);
+		return FeederObjectifyService.ofy().load().type(PpUser.class).id(id).now();
 	}
 
-	public static Cronjob getCronjob(long id) {
-		LOG.log(Level.FINE, "Retrieve cronjob id=" + id);
-		return FeederObjectifyService.ofy().load().type(Cronjob.class).id(id).now();
+	public static void savePpfaxUser(PpUser user) {
+		LOG.log(Level.FINE, "Save PpfaxUser with id = " + user.getId());
+		FeederObjectifyService.ofy().save().entity(user).now();
 	}
 
-	public static void deleteCronjob(long id) {
-		LOG.log(Level.FINE, "Delete cronjob id=" + id);
-		FeederObjectifyService.ofy().delete().type(Cronjob.class).id(id).now();
+	// Articles
+	public static List<Article> getArticles(String searchterm, int offset, int limit) {
+		LOG.log(Level.FINE, "Retrieve articles");
+		Query<Article> query = FeederObjectifyService.ofy().load().type(Article.class);
+
+		if (searchterm != null)
+			query = query.filter("", "");
+
+		if (offset != 0)
+			query = query.offset(offset);
+
+		if (limit != 0)
+			query = query.limit(limit);
+
+		return query.list();
 	}
 
-	public static void saveCronjob(Cronjob cronjob) {
-		LOG.log(Level.FINE, "Save Cronjob with id = " + cronjob.getId());
-		FeederObjectifyService.ofy().save().entity(cronjob).now();
+	public static Article getArticle(long id) {
+		LOG.log(Level.FINE, "Retrieve article id=" + id);
+		return FeederObjectifyService.ofy().load().type(Article.class).id(id).now();
 	}
 
-	public static void saveLogEntry(LogEntry logEntry) {
-		LOG.log(Level.FINE, "Save log entry");
-		FeederObjectifyService.ofy().save().entity(logEntry).now();
+	public static void saveArticle(Article article) {
+		LOG.log(Level.FINE, "Save Article id = " + article.getId());
+		FeederObjectifyService.ofy().save().entity(article).now();
 	}
 
-	public static List<LogEntry> getLogEntries(int offset, int limit) {
-		LOG.log(Level.FINE, "Retrieve log entries");
-		return FeederObjectifyService.ofy().load().type(LogEntry.class).order("-timestamp").offset(offset).limit(limit).list();
-	}
-
-	public static void saveLogEntry(CronLogLevel level, String message) {
-		LogEntry logEntry = new LogEntry();
-		logEntry.setTimestamp(new Date());
-		logEntry.setMessage(message);
-		logEntry.setLevel(level);
-		LOG.log(Level.FINE, "Save log entry");
-		FeederObjectifyService.ofy().save().entity(logEntry).now();
-	}
-
-	// Secret Token
-
-	public static String getSecretToken() {
-		String token = (String)syncCache.get(KEY_SECRET_TOKEN);
-		if (token == null) {
-			token = UUID.randomUUID().toString();
-			syncCache.put(KEY_SECRET_TOKEN, token);
-		}
-		return token;
-	}
+	// Categories
 
 }

@@ -16,9 +16,4 @@ public enum UserRole {
 		return role;
 	}
 
-	public static UserRole getInstanceByValue(String s) {
-		for (UserRole r : values())
-			if (r.role.equals(s)) return r;
-		return null;
-	}
 }

@@ -11,6 +11,8 @@ import com.google.appengine.api.memcache.MemcacheServiceFactory;
 import com.googlecode.objectify.cmd.Query;
 
 import farm.chaos.ppfax.model.Article;
+import farm.chaos.ppfax.model.Category;
+import farm.chaos.ppfax.model.Paragraph;
 import farm.chaos.ppfax.model.PpUser;
 
 public class Datastore {
@@ -19,6 +21,8 @@ public class Datastore {
 
 	private static MemcacheService syncCache;
 
+	private static final String KEY_USER_EMAIL = "USER_EMAIL_";
+
 	static {
     	NamespaceManager.set(null);
         syncCache = MemcacheServiceFactory.getMemcacheService();
@@ -26,35 +30,46 @@ public class Datastore {
 	}
 
 	// Users
-	public static List<PpUser> getPpfaxUsers(String searchterm, int offset, int limit) {
+	public static List<PpUser> getPpUsers(String searchterm, int offset, int limit) {
 		LOG.log(Level.FINE, "Retrieve all users");
-		return FeederObjectifyService.ofy().load().type(PpUser.class).offset(offset).limit(limit).list();
+		Query<PpUser> query = FeederObjectifyService.ofy().load().type(PpUser.class);
+		if (searchterm != null) query = query.filter("", searchterm); // TODO
+		if (offset != 0) query = query.offset(offset);
+		if (limit != 0) query = query.limit(limit);
+		return query.list();
 	}
 
-	public static PpUser getPpfaxUser(long id) {
+	public static PpUser getPpUser(long id) {
 		LOG.log(Level.FINE, "Retrieve user id=" + id);
 		return FeederObjectifyService.ofy().load().type(PpUser.class).id(id).now();
 	}
 
-	public static void savePpfaxUser(PpUser user) {
-		LOG.log(Level.FINE, "Save PpfaxUser with id = " + user.getId());
+	public static PpUser getPpUser(String email) {
+		LOG.log(Level.FINE, "Retrieve user email=" + email);
+		LOG.log(Level.INFO, "Retrieve user email=" + email);
+		PpUser user = (PpUser)syncCache.get(KEY_USER_EMAIL + email);
+		LOG.log(Level.INFO, "Cache: " + user);
+		if (user != null) return user;
+
+		user = FeederObjectifyService.ofy().load().type(PpUser.class).filter("email", email).first().now();
+		LOG.log(Level.INFO, "Datastore: " + user);
+		if (user != null) syncCache.put(KEY_USER_EMAIL + email, user);
+		return user;
+	}
+
+	public static void savePpUser(PpUser user) {
+		LOG.log(Level.FINE, "Save PpUser with id = " + user.getId());
 		FeederObjectifyService.ofy().save().entity(user).now();
+		syncCache.put(KEY_USER_EMAIL + user.getEmail(), user);
 	}
 
 	// Articles
 	public static List<Article> getArticles(String searchterm, int offset, int limit) {
 		LOG.log(Level.FINE, "Retrieve articles");
 		Query<Article> query = FeederObjectifyService.ofy().load().type(Article.class);
-
-		if (searchterm != null)
-			query = query.filter("", "");
-
-		if (offset != 0)
-			query = query.offset(offset);
-
-		if (limit != 0)
-			query = query.limit(limit);
-
+		if (searchterm != null) query = query.filter("", ""); // TODO
+		if (offset != 0) query = query.offset(offset);
+		if (limit != 0) query = query.limit(limit);
 		return query.list();
 	}
 
@@ -68,6 +83,54 @@ public class Datastore {
 		FeederObjectifyService.ofy().save().entity(article).now();
 	}
 
+	// Paragraphs
+	public static List<Paragraph> getParagraphs(String searchterm, int offset, int limit) {
+		LOG.log(Level.FINE, "Retrieve paragraphs");
+		Query<Paragraph> query = FeederObjectifyService.ofy().load().type(Paragraph.class);
+		if (searchterm != null) query = query.filter("", ""); // TODO
+		if (offset != 0) query = query.offset(offset);
+		if (limit != 0) query = query.limit(limit);
+		return query.list();
+	}
+
+	public static Paragraph getParagraph(long id) {
+		LOG.log(Level.FINE, "Retrieve paragraph id=" + id);
+		return FeederObjectifyService.ofy().load().type(Paragraph.class).id(id).now();
+	}
+
+	public static List<Paragraph> getParagraphsForArticle(long articleId) {
+		LOG.log(Level.FINE, "Retrieve paragraphs");
+		return FeederObjectifyService.ofy()
+				.load()
+				.type(Paragraph.class)
+				.filter("articleId", articleId)
+				.order("sequence")
+				.list();
+	}
+
+	public static void saveParagraph(Paragraph paragraph) {
+		LOG.log(Level.FINE, "Save Paragraph id = " + paragraph.getId());
+		FeederObjectifyService.ofy().save().entity(paragraph).now();
+	}
+
 	// Categories
+	public static List<Category> getCategories(String searchterm, int offset, int limit) {
+		LOG.log(Level.FINE, "Retrieve categories");
+		Query<Category> query = FeederObjectifyService.ofy().load().type(Category.class);
+		if (searchterm != null) query = query.filter("", ""); // TODO
+		if (offset != 0) query = query.offset(offset);
+		if (limit != 0) query = query.limit(limit);
+		return query.list();
+	}
+
+	public static Category getCategory(long id) {
+		LOG.log(Level.FINE, "Retrieve article id=" + id);
+		return FeederObjectifyService.ofy().load().type(Category.class).id(id).now();
+	}
+
+	public static void saveCategory(Category category) {
+		LOG.log(Level.FINE, "Save category id = " + category.getId());
+		FeederObjectifyService.ofy().save().entity(category).now();
+	}
 
 }

@@ -5,9 +5,11 @@ import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.servlet.ServletException;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -15,13 +17,14 @@ import javax.ws.rs.core.Application;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 
 import farm.chaos.ppfax.model.Article;
 import farm.chaos.ppfax.model.PublicationStatus;
+import farm.chaos.ppfax.model.UserRole;
 import farm.chaos.ppfax.persistance.Datastore;
+import farm.chaos.ppfax.utils.PermissionService;
 import farm.chaos.ppfax.utils.StringUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -39,11 +42,12 @@ public class ApiController extends Application {
     @ApiOperation(value = "get article", response = Response.class)
     @Path("/article/{articleId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getArticle(@PathParam("articleId") String articleId) {
+    public Response getArticle(@PathParam("articleId") String articleId) throws ServletException {
 
-	    UserService userService = UserServiceFactory.getUserService();
-	    User user = userService.getCurrentUser();
-	    LOG.log(Level.INFO, "User " + user.getUserId() + " - " + user.getEmail());
+    	LOG.log(Level.INFO, "getArticle(" + articleId + ")");
+
+		UserService userService = UserServiceFactory.getUserService();
+		PermissionService.validatePermission(userService, UserRole.READER);
 
     	long id = StringUtils.atol(articleId);
     	Article a = Datastore.getArticle(id);
@@ -53,24 +57,49 @@ public class ApiController extends Application {
     	return Response.ok().entity(a).build();
     }
 
+    @PUT
+    @ApiOperation(value = "create article", response = Response.class)
+    @Path("/article/")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response createArticle(Article article) throws ServletException {
+
+    	LOG.log(Level.INFO, "createArticle()");
+
+		UserService userService = UserServiceFactory.getUserService();
+    	PermissionService.validatePermission(userService, UserRole.EDITOR);
+
+    	Article newArticle = new Article();
+
+    	// update dedicated fields
+    	newArticle.setHeadline(article.getHeadline());
+    	newArticle.setTitle(article.getTitle());
+    	newArticle.setTeasertext(article.getTeasertext());
+    	newArticle.setKeywords(article.getKeywords());
+    	newArticle.setStatus(article.getStatus());
+    	newArticle.setCategoryId(article.getCategoryId());
+
+    	newArticle.setDateCreated(new Date());
+    	newArticle.setDateModified(new Date());
+
+    	Datastore.saveArticle(newArticle);
+    	URI uri = URI.create("/v1/article/" + newArticle.getId());
+    	return Response.created(uri).entity(newArticle).build();
+    }
+
     @POST
     @ApiOperation(value = "update article", response = Response.class)
     @Path("/article/{articleId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateArticle(Article article) {
+    public Response updateArticle(Article article) throws ServletException {
 
-	    UserService userService = UserServiceFactory.getUserService();
-	    User user = userService.getCurrentUser();
-	    LOG.log(Level.INFO, "User " + user.getUserId() + " - " + user.getEmail());
+    	LOG.log(Level.INFO, "updateArticle(" + article.getId() + ")");
 
-//    	SsoHelper.checkUserAccess(UserRole.EDITOR, securityContext, "updateArticle");
+		UserService userService = UserServiceFactory.getUserService();
+    	PermissionService.validatePermission(userService, UserRole.EDITOR);
 
     	Article existing = Datastore.getArticle(article.getId());
     	if (existing == null)
     		return Response.status(Response.Status.NOT_FOUND).build();
-
-//    	if (existing.getAuthorId() != ppfaxUser.getId())
-//        	SsoHelper.checkUserAccess(UserRole.MANAGER, securityContext, "updateArticle");
 
     	// update dedicated fields
     	existing.setHeadline(article.getHeadline());
@@ -91,11 +120,12 @@ public class ApiController extends Application {
     @ApiOperation(value = "delete article", response = Response.class)
     @Path("/article/{articleId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response deleteArticle(@PathParam("articleId") String articleId) {
+    public Response deleteArticle(@PathParam("articleId") String articleId) throws ServletException {
 
-	    UserService userService = UserServiceFactory.getUserService();
-	    User user = userService.getCurrentUser();
-	    LOG.log(Level.INFO, "User " + user.getUserId() + " - " + user.getEmail());
+    	LOG.log(Level.INFO, "deleteArticle(" + articleId + ")");
+
+		UserService userService = UserServiceFactory.getUserService();
+    	PermissionService.validatePermission(userService, UserRole.EDITOR);
 
     	long id = StringUtils.atol(articleId);
     	Article article = Datastore.getArticle(id);

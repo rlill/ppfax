@@ -11,8 +11,8 @@ logged in (Google account) - have role assigned
 
 Roles:
 READER: read-only access, all categories, articles, images
-EDITOR: create, publish, modify, delete own articles
-MANAGER: create, publish, modify, delete all articles and categories
+EDITOR: create, publish, modify, delete articles
+MANAGER: <editor> + create, publish, modify, delete categories
 ADMIN: <manager> + manage users
 
 GCP Project admin is always ppfax-admin
@@ -44,7 +44,7 @@ o article
 o paragraph
 - id
 - articleId
-- order
+- sequence
 - headline
 - imageId
 - style (layout with image)

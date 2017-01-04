@@ -8,6 +8,27 @@
   "basePath" : "/api",
   "schemes" : [ "http", "https" ],
   "paths" : {
+    "/v1/article" : {
+      "put" : {
+        "summary" : "create article",
+        "description" : "",
+        "operationId" : "createArticle",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/Article"
+          }
+        } ],
+        "responses" : {
+          "default" : {
+            "description" : "successful operation"
+          }
+        }
+      }
+    },
     "/v1/article/{articleId}" : {
       "get" : {
         "summary" : "get article",
@@ -24,10 +45,7 @@
           "default" : {
             "description" : "successful operation"
           }
-        },
-        "security" : [ {
-          "Bearer" : [ ]
-        } ]
+        }
       },
       "post" : {
         "summary" : "update article",
@@ -46,10 +64,7 @@
           "default" : {
             "description" : "successful operation"
           }
-        },
-        "security" : [ {
-          "Bearer" : [ ]
-        } ]
+        }
       },
       "delete" : {
         "summary" : "delete article",
@@ -66,10 +81,7 @@
           "default" : {
             "description" : "successful operation"
           }
-        },
-        "security" : [ {
-          "Bearer" : [ ]
-        } ]
+        }
       }
     }
   },

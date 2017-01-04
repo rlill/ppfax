@@ -25,6 +25,16 @@
         <url-pattern>/protocol</url-pattern>
     </servlet-mapping>
 
+    <!-- error controller -->
+    <servlet>
+        <servlet-name>Error</servlet-name>
+        <servlet-class>farm.chaos.ppfax.controller.ErrorController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Error</servlet-name>
+        <url-pattern>/error</url-pattern>
+    </servlet-mapping>
+
     <!-- API controller -->
     <servlet>
         <servlet-name>Api</servlet-name>
@@ -44,6 +54,11 @@
         <servlet-name>Api</servlet-name>
         <url-pattern>/api/*</url-pattern>
     </servlet-mapping>
+
+	<error-page>
+	    <error-code>500</error-code>
+	    <location>/error</location>
+	</error-page>
 
 	<!-- access -->
     <security-constraint>

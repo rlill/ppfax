@@ -15,6 +15,15 @@
         <url-pattern>/admin</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>Article</servlet-name>
+        <servlet-class>farm.chaos.ppfax.controller.ArticleController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Article</servlet-name>
+        <url-pattern>/article/*</url-pattern>
+    </servlet-mapping>
+
     <!-- task-queue controller -->
     <servlet>
         <servlet-name>Protocol</servlet-name>
@@ -65,6 +74,7 @@
         <web-resource-collection>
             <web-resource-name>backend</web-resource-name>
             <url-pattern>/admin</url-pattern>
+            <url-pattern>/article</url-pattern>
         </web-resource-collection>
         <auth-constraint>
             <role-name>*</role-name>

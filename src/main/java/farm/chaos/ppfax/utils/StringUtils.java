@@ -30,4 +30,11 @@ public class StringUtils {
 		return (s != null && (s.equals("1") || s.equalsIgnoreCase("true") || s.equalsIgnoreCase("yes")));
 	}
 
+	public static long getIdFromUri(String requestURI) {
+		if (requestURI == null) return 0;
+		int p = requestURI.lastIndexOf('/');
+		if (p < 1 || p >= requestURI.length() - 1) return 0;
+		return atol(requestURI.substring(p + 1));
+	}
+
 }

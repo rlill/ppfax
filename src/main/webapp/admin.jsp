@@ -22,7 +22,6 @@
   Status: ${ppUser.status}<br>
 </c:if>
 
-<c:if test="${not empty users}">
 <h3>Users</h3>
 <table class="grid">
 
@@ -33,6 +32,7 @@
 		<th>Status</th>
 	</tr>
 
+<c:if test="${not empty users}">
 <c:forEach items="${users}" var="user">
 
 	<form action="/admin" method="POST">
@@ -58,7 +58,7 @@
 	</form>
 	
 </c:forEach>
-
+</c:if>
 
 	<form action="/admin" method="POST">
 	<input type="hidden" name="action" value="addUser"/>
@@ -80,7 +80,6 @@
 	</form>
 
 </table>
-</c:if>
 
 
 </body>

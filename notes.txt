@@ -47,8 +47,10 @@ o paragraph
 - sequence
 - headline
 - imageId
-- style (layout with image)
 - body text
+- style (layout with image)
+- date created
+- date modified
 
 o image
 - id
@@ -56,6 +58,7 @@ o image
 - storage path (GCS)
 - copyright
 - date created
+- date modified
 - author
 - status (offline, online, deleted)
 

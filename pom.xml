@@ -266,9 +266,9 @@
                                 <schemes>http,https</schemes>
 <!-- 
                                 <host>localhost:8888</host>
-                                <host>localhost:8080</host>
- -->
                                 <host>ppfax-cms.appspot.com</host>
+ -->
+                                <host>localhost:8080</host>
                                 <basePath>/api</basePath>
                                 <info>
                                     <title>PPFax CMS</title>

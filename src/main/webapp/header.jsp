@@ -17,7 +17,8 @@
   	<h1>&Pi;&Pi;&Phi;&Alpha;&Xi;</h1>
   </td>
   <td class="username">
-    <a href="/admin">Crontab</a>
+    <a href="/admin">Users</a>
+    <a href="/article">Articles</a>
     <a href="/swagger/index.html">API</a>
   </td>
 </tr>

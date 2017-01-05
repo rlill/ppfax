@@ -18,7 +18,7 @@ public class Paragraph {
 			private Date dateModified;
 			private ParagraphStyle style;
 			private Long imageId;
-			private PublicationStatus status;
+	@Index	private PublicationStatus status;
 
 	public Paragraph() {
 	}

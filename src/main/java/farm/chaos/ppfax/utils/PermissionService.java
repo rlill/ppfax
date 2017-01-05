@@ -3,6 +3,8 @@ package farm.chaos.ppfax.utils;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.ws.rs.ForbiddenException;
+
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 
@@ -15,15 +17,12 @@ public class PermissionService {
 
 	private static final Logger LOG = Logger.getLogger(PermissionService.class.getName());
 
-	public static PpUser validatePermission(UserService userService, UserRole requiredRole) throws InsufficientPermissionException {
-
-		// Admin can do anything
-		if (userService.isUserAdmin()) return null;
+	public static void validatePermission(UserService userService, UserRole requiredRole) throws ForbiddenException {
 
 	    User user = userService.getCurrentUser();
 	    if (user == null) {
 	    	LOG.log(Level.INFO, "No current user, not logged in?");
-	    	throw new InsufficientPermissionException();
+	    	throw new ForbiddenException();
 	    }
     	LOG.log(Level.INFO, "User " + user.getUserId() + " - " + user.getEmail());
 
@@ -37,21 +36,25 @@ public class PermissionService {
 			ppUser.setStatus(UserStatus.REQUESTED);
 			Datastore.savePpUser(ppUser);
 
-			throw new InsufficientPermissionException();
+			if (!userService.isUserAdmin()) throw new ForbiddenException();
 		}
     	LOG.log(Level.INFO, ppUser.toString());
 
+		// Admin can do anything
+		if (userService.isUserAdmin()) {
+			LOG.log(Level.INFO, "User is GCP project admin");
+			return;
+		}
+
 		if (ppUser.getStatus() != UserStatus.ACTIVE) {
 			LOG.log(Level.INFO, "User has status " + ppUser.getStatus());
-			throw new InsufficientPermissionException();
+			throw new ForbiddenException();
 		}
 
 		if (!checkRole(requiredRole, ppUser.getRole())) {
 			LOG.log(Level.INFO, "User has role " + ppUser.getRole() + ", but required is " + requiredRole);
-			throw new InsufficientPermissionException();
+			throw new ForbiddenException();
 		}
-
-		return ppUser;
 	}
 
 	public static boolean checkRole(UserRole requiredRole, UserRole availableRole) {

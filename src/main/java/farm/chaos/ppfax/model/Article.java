@@ -14,12 +14,12 @@ public class Article {
 			private String title;
 			private String headline;
 			private String teasertext;
-	@Index	private Date dateCreated;
-			private Date dateModified;
+			private Date dateCreated;
+	@Index	private Date dateModified;
 			private Date datePublished;
 			private String keywords;
 			private Long authorId;
-			private PublicationStatus status;
+	@Index	private PublicationStatus status;
 
 
 	public Article() {

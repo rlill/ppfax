@@ -7,19 +7,17 @@ import com.googlecode.objectify.annotation.Id;
 import com.googlecode.objectify.annotation.Index;
 
 @Entity
-public class Category {
+public class Image {
 
 	@Id 	private Long id;
-			private String name;
-			private String path;
-			private String sidebarcontent;
-			private Long parentId;
+			private String title;
+	@Index	private String storagePath;
 			private Date dateCreated;
 	@Index	private Date dateModified;
-			private String keywords;
+			private Long authorId;
 	@Index	private PublicationStatus status;
 
-	public Category() {
+	public Image() {
 	}
 
 	public Long getId() {
@@ -30,36 +28,20 @@ public class Category {
 		this.id = id;
 	}
 
-	public String getName() {
-		return name;
+	public String getTitle() {
+		return title;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setTitle(String title) {
+		this.title = title;
 	}
 
-	public String getPath() {
-		return path;
+	public String getStoragePath() {
+		return storagePath;
 	}
 
-	public void setPath(String path) {
-		this.path = path;
-	}
-
-	public String getSidebarcontent() {
-		return sidebarcontent;
-	}
-
-	public void setSidebarcontent(String sidebarcontent) {
-		this.sidebarcontent = sidebarcontent;
-	}
-
-	public Long getParentId() {
-		return parentId;
-	}
-
-	public void setParentId(Long parentId) {
-		this.parentId = parentId;
+	public void setStoragePath(String storagePath) {
+		this.storagePath = storagePath;
 	}
 
 	public Date getDateCreated() {
@@ -78,12 +60,12 @@ public class Category {
 		this.dateModified = dateModified;
 	}
 
-	public String getKeywords() {
-		return keywords;
+	public Long getAuthorId() {
+		return authorId;
 	}
 
-	public void setKeywords(String keywords) {
-		this.keywords = keywords;
+	public void setAuthorId(Long authorId) {
+		this.authorId = authorId;
 	}
 
 	public PublicationStatus getStatus() {
@@ -97,14 +79,12 @@ public class Category {
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append("Category [id=");
+		builder.append("Image [id=");
 		builder.append(id);
-		builder.append(", name=");
-		builder.append(name);
-		builder.append(", path=");
-		builder.append(path);
-		builder.append(", parentId=");
-		builder.append(parentId);
+		builder.append(", storagePath=");
+		builder.append(storagePath);
+		builder.append(", authorId=");
+		builder.append(authorId);
 		builder.append(", status=");
 		builder.append(status);
 		builder.append("]");

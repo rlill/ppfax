@@ -12,6 +12,7 @@ import com.googlecode.objectify.cmd.Query;
 
 import farm.chaos.ppfax.model.Article;
 import farm.chaos.ppfax.model.Category;
+import farm.chaos.ppfax.model.Image;
 import farm.chaos.ppfax.model.Paragraph;
 import farm.chaos.ppfax.model.PpUser;
 
@@ -70,6 +71,7 @@ public class Datastore {
 		if (searchterm != null) query = query.filter("", ""); // TODO
 		if (offset != 0) query = query.offset(offset);
 		if (limit != 0) query = query.limit(limit);
+		query = query.order("-dateModified");
 		return query.list();
 	}
 
@@ -131,6 +133,26 @@ public class Datastore {
 	public static void saveCategory(Category category) {
 		LOG.log(Level.FINE, "Save category id = " + category.getId());
 		FeederObjectifyService.ofy().save().entity(category).now();
+	}
+
+	// Images
+	public static List<Image> getImages(String searchterm, int offset, int limit) {
+		LOG.log(Level.FINE, "Retrieve images");
+		Query<Image> query = FeederObjectifyService.ofy().load().type(Image.class);
+		if (searchterm != null) query = query.filter("", ""); // TODO
+		if (offset != 0) query = query.offset(offset);
+		if (limit != 0) query = query.limit(limit);
+		return query.list();
+	}
+
+	public static Image getImage(long id) {
+		LOG.log(Level.FINE, "Retrieve image id=" + id);
+		return FeederObjectifyService.ofy().load().type(Image.class).id(id).now();
+	}
+
+	public static void saveImage(Image image) {
+		LOG.log(Level.FINE, "Save Image id = " + image.getId());
+		FeederObjectifyService.ofy().save().entity(image).now();
 	}
 
 }

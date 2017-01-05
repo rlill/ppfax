@@ -50,7 +50,7 @@ public class AdminController extends HttpServlet {
 	    	user.setName(request.getParameter("name"));
 	    	user.setRole(UserRole.valueOf(request.getParameter("role")));
 	    	user.setStatus(UserStatus.valueOf(request.getParameter("status")));
-	    	LOG.log(Level.INFO, "Update " + user);
+	    	LOG.log(Level.INFO, "Create " + user);
 	    	Datastore.savePpUser(user);
 	    }
 

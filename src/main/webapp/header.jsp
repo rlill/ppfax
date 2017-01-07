@@ -19,6 +19,7 @@
   <td class="username">
     <a href="/admin">Users</a>
     <a href="/article">Articles</a>
+    <a href="/category">Categories</a>
     <a href="/swagger/index.html">API</a>
   </td>
 </tr>

@@ -18,6 +18,10 @@ public class PermissionService {
 	private static final Logger LOG = Logger.getLogger(PermissionService.class.getName());
 
 	public static void validatePermission(UserService userService, UserRole requiredRole) throws ForbiddenException {
+		validatePermission(userService, requiredRole, null);
+	}
+
+	public static void validatePermission(UserService userService, UserRole requiredRole, PpUser rUser) throws ForbiddenException {
 
 	    User user = userService.getCurrentUser();
 	    if (user == null) {
@@ -39,6 +43,11 @@ public class PermissionService {
 			if (!userService.isUserAdmin()) throw new ForbiddenException();
 		}
     	LOG.log(Level.INFO, ppUser.toString());
+
+    	if (rUser != null) {
+    		rUser.setId(ppUser.getId());
+    		rUser.setName(ppUser.getName());
+    	}
 
 		// Admin can do anything
 		if (userService.isUserAdmin()) {

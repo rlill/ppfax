@@ -16,6 +16,7 @@ public class Category {
 			private Long parentId;
 			private Date dateCreated;
 	@Index	private Date dateModified;
+			private Long authorId;
 			private String keywords;
 	@Index	private PublicationStatus status;
 
@@ -76,6 +77,14 @@ public class Category {
 
 	public void setDateModified(Date dateModified) {
 		this.dateModified = dateModified;
+	}
+
+	public Long getAuthorId() {
+		return authorId;
+	}
+
+	public void setAuthorId(Long authorId) {
+		this.authorId = authorId;
 	}
 
 	public String getKeywords() {

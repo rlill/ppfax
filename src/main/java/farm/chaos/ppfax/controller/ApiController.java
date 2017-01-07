@@ -21,6 +21,7 @@ import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 
 import farm.chaos.ppfax.model.Article;
+import farm.chaos.ppfax.model.PpUser;
 import farm.chaos.ppfax.model.PublicationStatus;
 import farm.chaos.ppfax.model.UserRole;
 import farm.chaos.ppfax.persistance.Datastore;
@@ -66,7 +67,8 @@ public class ApiController extends Application {
     	LOG.log(Level.INFO, "createArticle()");
 
 		UserService userService = UserServiceFactory.getUserService();
-    	PermissionService.validatePermission(userService, UserRole.EDITOR);
+		PpUser user = new PpUser();
+    	PermissionService.validatePermission(userService, UserRole.EDITOR, user);
 
     	Article newArticle = new Article();
 
@@ -80,6 +82,7 @@ public class ApiController extends Application {
 
     	newArticle.setDateCreated(new Date());
     	newArticle.setDateModified(new Date());
+    	newArticle.setAuthorId(user.getId());
 
     	Datastore.saveArticle(newArticle);
     	URI uri = URI.create("/v1/article/" + newArticle.getId());

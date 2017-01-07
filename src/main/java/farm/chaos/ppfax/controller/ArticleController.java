@@ -15,6 +15,7 @@ import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 
 import farm.chaos.ppfax.model.Article;
+import farm.chaos.ppfax.model.PpUser;
 import farm.chaos.ppfax.model.UserRole;
 import farm.chaos.ppfax.persistance.Datastore;
 import farm.chaos.ppfax.utils.PermissionService;
@@ -29,7 +30,8 @@ public class ArticleController extends HttpServlet {
 			throws IOException, ServletException {
 
 		UserService userService = UserServiceFactory.getUserService();
-		PermissionService.validatePermission(userService, UserRole.EDITOR);
+		PpUser user = new PpUser();
+		PermissionService.validatePermission(userService, UserRole.EDITOR, user);
 
 	    String action = request.getParameter("action");
 	    long id = StringUtils.atol(request.getParameter("id"));
@@ -49,6 +51,7 @@ public class ArticleController extends HttpServlet {
 	    	Date now = new Date();
     		article.setDateCreated(now);
     		article.setDateModified(now);
+    		article.setAuthorId(user.getId());
 	    	LOG.log(Level.INFO, "Create " + article);
 	    	Datastore.saveArticle(article);
 	    }
@@ -65,14 +68,13 @@ public class ArticleController extends HttpServlet {
 			return;
 		}
 
-		PermissionService.validatePermission(userService, UserRole.READER);
+		PermissionService.validatePermission(userService, UserRole.READER, null);
 
 		long id = StringUtils.getIdFromUri(request.getRequestURI());
 
 		if (id > 0) {
 			request.setAttribute("article", Datastore.getArticle(id));
 			request.setAttribute("paragraphs", Datastore.getParagraphsForArticle(id));
-			// TODO: Images !??
 		}
 
     	ControllerUtils.setStandardFields(request, userService);

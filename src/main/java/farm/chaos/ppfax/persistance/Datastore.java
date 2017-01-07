@@ -122,6 +122,7 @@ public class Datastore {
 		if (searchterm != null) query = query.filter("", ""); // TODO
 		if (offset != 0) query = query.offset(offset);
 		if (limit != 0) query = query.limit(limit);
+		query = query.order("path");
 		return query.list();
 	}
 

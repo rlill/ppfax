@@ -85,10 +85,12 @@ public class CategoryController extends HttpServlet {
 		PermissionService.validatePermission(userService, UserRole.READER, user);
 
 		long id = StringUtils.getIdFromUri(request.getRequestURI());
-
 		if (id > 0) {
 			request.setAttribute("category", Datastore.getCategory(id));
 		}
+
+		if (request.getRequestURI().endsWith("/new"))
+			request.setAttribute("newCategory", "1");
 
     	ControllerUtils.setStandardFields(request, userService);
 

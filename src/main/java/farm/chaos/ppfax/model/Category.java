@@ -2,21 +2,25 @@ package farm.chaos.ppfax.model;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
 import com.googlecode.objectify.annotation.Index;
+
+import farm.chaos.ppfax.persistance.Datastore;
 
 @Entity
 public class Category {
 
 	@Id 	private Long id;
 			private String name;
-			private String path;
+	@Index	private String path;
 			private String sidebarcontent;
 			private Long parentId;
 			private Date dateCreated;
 	@Index	private Date dateModified;
 			private Long authorId;
+			private PpUser authorRef;
 			private String keywords;
 	@Index	private PublicationStatus status;
 
@@ -85,6 +89,15 @@ public class Category {
 
 	public void setAuthorId(Long authorId) {
 		this.authorId = authorId;
+		authorRef = null;
+	}
+
+	@JsonIgnore
+	public PpUser getAuthor() {
+		if (authorRef != null) return authorRef;
+		if (authorId == null) return null;
+		authorRef = Datastore.getPpUser(authorId);
+		return authorRef;
 	}
 
 	public String getKeywords() {

@@ -97,11 +97,13 @@ public class Paragraph {
 
 	public void setImageId(Long imageId) {
 		this.imageId = imageId;
+		imageRef = null;
 	}
 
 	@JsonIgnore
 	public Image getImage() {
 		if (imageRef != null) return imageRef;
+		if (imageId == null) return null;
 		imageRef = Datastore.getImage(imageId);
 		return imageRef;
 	}

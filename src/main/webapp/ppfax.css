@@ -24,6 +24,7 @@ table.grid td {
 table.grid th,
 table.grid td {
 	padding: 5px;
+	margin: 5px;
 }
 
 table.head {
@@ -46,9 +47,12 @@ table.editor th {
 	text-align: right;
 	vertical-align: middle;
 	padding: 5px;
+	margin: 5px;
 }
 table.editor td {
 	width: 450px;
+	padding: 5px;
+	margin: 5px;
 }
 
 form {
@@ -62,8 +66,8 @@ select {
 	border: 0;
 	border-bottom: 2px solid #ddd;
 	background-color: #fff;
-	padding: 5px;
-	margin: 4px;
+	padding: 5px 0;
+	margin: 0;
 	width: 100%;
 	outline: none;
 }

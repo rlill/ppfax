@@ -37,4 +37,13 @@ public class StringUtils {
 		return atol(requestURI.substring(p + 1));
 	}
 
+	// --> /topic/topic/title-of-the-article-1234.html
+	public static long getArticleIdFromUri(String requestURI) {
+		if (requestURI == null) return 0;
+		int p1 = requestURI.lastIndexOf('-');
+		int p2 = requestURI.lastIndexOf('.');
+		if (p1 < 1 || p1 >= p2 || p2 >= requestURI.length() - 1) return 0;
+		return atol(requestURI.substring(p1 + 1, p2));
+	}
+
 }

@@ -31,6 +31,20 @@
 		<td><input type="text" name="keywords" value="${category.keywords}"/></td>
 	</tr>
 	<tr>
+		<th>Parent</th>
+		<td>
+			<select name="parentId" size="5">
+				<option value="0">ROOT</option>
+				<c:forEach var="cat" items="${categories}">
+					<c:if test="${cat.id != category.id}">
+						<c:set var="chk" value="${cat.id == category.parentId ? 'selected' : ''}"/>
+						<option value="${cat.id}" ${chk}>${cat.path}</option>
+					</c:if>
+				</c:forEach>
+			</select>
+		</td>
+	</tr>
+	<tr>
 		<th>Status</th>
 		<td>
 			<select name="status" size="1">
@@ -71,6 +85,17 @@
 	<tr>
 		<th>Keywords</th>
 		<td><input type="text" name="keywords"></td>
+	</tr>
+	<tr>
+		<th>Parent</th>
+		<td>
+			<select name="parentId" size="5">
+				<option value="0">ROOT</option>
+				<c:forEach var="cat" items="${categories}">
+					<option value="${cat.id}">${cat.path}</option>
+				</c:forEach>
+			</select>
+		</td>
 	</tr>
 	<tr>
 		<th>Status</th>

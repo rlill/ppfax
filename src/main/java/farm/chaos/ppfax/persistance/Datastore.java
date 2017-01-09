@@ -75,6 +75,16 @@ public class Datastore {
 		return query.list();
 	}
 
+	public static List<Article> getArticlesInCategory(Long categoryId, int offset, int limit) {
+		LOG.log(Level.FINE, "Retrieve articles");
+		Query<Article> query = FeederObjectifyService.ofy().load().type(Article.class);
+		query = query.filter("categoryId", categoryId);
+		if (offset != 0) query = query.offset(offset);
+		if (limit != 0) query = query.limit(limit);
+		query = query.order("-dateModified");
+		return query.list();
+	}
+
 	public static Article getArticle(long id) {
 		LOG.log(Level.FINE, "Retrieve article id=" + id);
 		return FeederObjectifyService.ofy().load().type(Article.class).id(id).now();
@@ -127,12 +137,17 @@ public class Datastore {
 	}
 
 	public static Category getCategory(long id) {
-		LOG.log(Level.FINE, "Retrieve article id=" + id);
+		LOG.log(Level.FINE, "Retrieve category id=" + id);
 		return FeederObjectifyService.ofy().load().type(Category.class).id(id).now();
 	}
 
+	public static Category getCategoryByPath(String path) {
+		LOG.log(Level.FINE, "Retrieve category path=" + path);
+		return FeederObjectifyService.ofy().load().type(Category.class).filter("path", path).first().now();
+	}
+
 	public static void saveCategory(Category category) {
-		LOG.log(Level.FINE, "Save category id = " + category.getId());
+		LOG.log(Level.FINE, "Save category id=" + category.getId());
 		FeederObjectifyService.ofy().save().entity(category).now();
 	}
 

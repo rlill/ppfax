@@ -19,6 +19,7 @@ import farm.chaos.ppfax.model.PpUser;
 import farm.chaos.ppfax.model.PublicationStatus;
 import farm.chaos.ppfax.model.UserRole;
 import farm.chaos.ppfax.persistance.Datastore;
+import farm.chaos.ppfax.utils.CategoryService;
 import farm.chaos.ppfax.utils.PermissionService;
 import farm.chaos.ppfax.utils.StringUtils;
 
@@ -41,10 +42,14 @@ public class CategoryController extends HttpServlet {
 	    	Category category = Datastore.getCategory(id);
 	    	if (category != null) {
 	    		category.setName(request.getParameter("name"));
-	    		category.setPath(request.getParameter("path"));
 	    		category.setSidebarcontent(request.getParameter("sidebarcontent"));
 	    		category.setKeywords(request.getParameter("keywords"));
+	    		category.setParentId(StringUtils.atol(request.getParameter("parentId")));
 	    		category.setStatus(PublicationStatus.valueOf(request.getParameter("status")));
+
+	    		// set path first to user-input, then correct
+	    		category.setPath(request.getParameter("path"));
+	    		category.setPath(CategoryService.getCategoryPath(category));
 
 	    		category.setDateModified(new Date());
 
@@ -55,10 +60,14 @@ public class CategoryController extends HttpServlet {
 	    else if (action != null && action.equals("addCategory")) {
 	    	Category category = new Category();
 	    	category.setName(request.getParameter("name"));
-	    	category.setPath(request.getParameter("path"));
     		category.setSidebarcontent(request.getParameter("sidebarcontent"));
     		category.setKeywords(request.getParameter("keywords"));
+    		category.setParentId(StringUtils.atol(request.getParameter("parentId")));
     		category.setStatus(PublicationStatus.valueOf(request.getParameter("status")));
+
+    		// set path first to user-input, then correct
+    		category.setPath(request.getParameter("path"));
+    		category.setPath(CategoryService.getCategoryPath(category));
 
 	    	Date now = new Date();
 	    	category.setDateCreated(now);

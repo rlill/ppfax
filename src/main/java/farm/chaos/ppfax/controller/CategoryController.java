@@ -47,9 +47,16 @@ public class CategoryController extends HttpServlet {
 	    		category.setParentId(StringUtils.atol(request.getParameter("parentId")));
 	    		category.setStatus(PublicationStatus.valueOf(request.getParameter("status")));
 
-	    		// set path first to user-input, then correct
-	    		category.setPath(request.getParameter("path"));
-	    		category.setPath(CategoryService.getCategoryPath(category));
+	    		String newPath = request.getParameter("path");
+	    		LOG.log(Level.INFO, "old: " + category.getPath() + ", new: " + newPath);
+	    		if (!category.getPath().equals(newPath)) {
+		    		// set path first to user-input, then correct
+		    		category.setPath(newPath);
+		    		category.setPath(CategoryService.getCategoryPath(category));
+
+		    		// fix path for all sub-categories
+		    		CategoryService.fixSubcategoryPaths(id);
+	    		}
 
 	    		category.setDateModified(new Date());
 
@@ -100,8 +107,6 @@ public class CategoryController extends HttpServlet {
 
 		if (request.getRequestURI().endsWith("/new"))
 			request.setAttribute("newCategory", "1");
-
-    	ControllerUtils.setStandardFields(request, userService);
 
     	request.setAttribute("categories", Datastore.getCategories(null, 0, 10));
 	    request.setAttribute("publicationStatus", PublicationStatus.values());

@@ -28,7 +28,7 @@ public class PermissionService {
 	    	LOG.log(Level.INFO, "No current user, not logged in?");
 	    	throw new ForbiddenException();
 	    }
-    	LOG.log(Level.INFO, "User " + user.getUserId() + " - " + user.getEmail());
+    	LOG.log(Level.FINE, "User " + user.getUserId() + " - " + user.getEmail());
 
 		PpUser ppUser = Datastore.getPpUser(user.getEmail());
 		if (ppUser == null) {
@@ -42,7 +42,7 @@ public class PermissionService {
 
 			if (!userService.isUserAdmin()) throw new ForbiddenException();
 		}
-    	LOG.log(Level.INFO, ppUser.toString());
+    	LOG.log(Level.FINE, ppUser.toString());
 
     	if (rUser != null) {
     		rUser.setId(ppUser.getId());
@@ -51,7 +51,7 @@ public class PermissionService {
 
 		// Admin can do anything
 		if (userService.isUserAdmin()) {
-			LOG.log(Level.INFO, "User is GCP project admin");
+			LOG.log(Level.FINE, "User is GCP project admin");
 			return;
 		}
 

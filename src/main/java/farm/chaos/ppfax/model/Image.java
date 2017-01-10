@@ -2,6 +2,7 @@ package farm.chaos.ppfax.model;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
 import com.googlecode.objectify.annotation.Index;
@@ -42,6 +43,11 @@ public class Image {
 
 	public void setStoragePath(String storagePath) {
 		this.storagePath = storagePath;
+	}
+
+	@JsonIgnore
+	public String getImageUrl() {
+		return storagePath;
 	}
 
 	public Date getDateCreated() {

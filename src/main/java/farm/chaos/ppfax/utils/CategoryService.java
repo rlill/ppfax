@@ -1,10 +1,15 @@
 package farm.chaos.ppfax.utils;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import farm.chaos.ppfax.model.Article;
 import farm.chaos.ppfax.model.Category;
 import farm.chaos.ppfax.persistance.Datastore;
 
 public class CategoryService {
+
+	private static final Logger LOG = Logger.getLogger(CategoryService.class.getName());
 
 	private static final int MAX_CATEGORY_DEPTH = 10;
 
@@ -19,7 +24,9 @@ public class CategoryService {
 			if (--maxdepth == 0) throw new IllegalArgumentException("Category path deeper than " + MAX_CATEGORY_DEPTH + " levels or recursion");
 		}
 
-		return path.toLowerCase();
+		String p = path.toLowerCase();
+		LOG.log(Level.INFO, "Path: " + p);
+		return p;
 	}
 
 	public static String rightPath(String fullPath) {
@@ -49,10 +56,22 @@ public class CategoryService {
 		Category category = Datastore.getCategory(article.getCategoryId());
 		path.append(category.getPath())
 			.append('/')
-			.append(normalizePath(article.getTitle()) + "-" + article.getHeadline())
+			.append(normalizePath(article.getTitle() + "-" + article.getHeadline()))
 			.append('-')
 			.append(article.getId())
 			.append(".html");
 		return path.toString();
+	}
+
+	public static void fixSubcategoryPaths(long categoryId) {
+		LOG.log(Level.INFO, "Fix paths for subcategories of " + categoryId);
+		for (Category subcat : Datastore.getSubCategories(categoryId)) {
+			String newPath = getCategoryPath(subcat);
+			if (!newPath.equals(subcat.getPath())) {
+				subcat.setPath(newPath);
+				Datastore.saveCategory(subcat);
+				fixSubcategoryPaths(subcat.getId());
+			}
+		}
 	}
 }

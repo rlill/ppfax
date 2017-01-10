@@ -13,18 +13,16 @@
 
 Article
 
-<%--
-	<h3>${article.title}</h3>
-	<h2>${article.headline}</h2>
-	<p><b>${article.teasertext}</b></p>
-	
-	<c:forEach var="paragraph" items="${paragraphs}">
-		<u>${paragraph.headline}</u><br>
-		<p>${paragraph.bodyText}</p>
-	</c:forEach>
+<h3>${article.title}</h3>
+<h2>${article.headline}</h2>
+<p><b>${article.teasertext}</b></p>
 
-	<i>${article.authorId}</i><br>
- --%>
+<c:forEach var="paragraph" items="${paragraphs}">
+	<u>${paragraph.headline}</u><br>
+	<p>${paragraph.bodyText}</p>
+</c:forEach>
+
+<i>${article.authorId}</i><br>
 
 
 </body>

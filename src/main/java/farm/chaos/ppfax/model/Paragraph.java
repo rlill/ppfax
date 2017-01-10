@@ -21,7 +21,6 @@ public class Paragraph {
 			private Date dateModified;
 			private ParagraphStyle style;
 			private Long imageId;
-	@Index	private PublicationStatus status;
 			private Image imageRef;
 
 	public Paragraph() {
@@ -108,14 +107,6 @@ public class Paragraph {
 		return imageRef;
 	}
 
-	public PublicationStatus getStatus() {
-		return status;
-	}
-
-	public void setStatus(PublicationStatus status) {
-		this.status = status;
-	}
-
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
@@ -129,8 +120,6 @@ public class Paragraph {
 		builder.append(style);
 		builder.append(", imageId=");
 		builder.append(imageId);
-		builder.append(", status=");
-		builder.append(status);
 		builder.append("]");
 		return builder.toString();
 	}

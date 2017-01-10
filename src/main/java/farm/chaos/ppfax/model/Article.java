@@ -2,15 +2,21 @@ package farm.chaos.ppfax.model;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
 import com.googlecode.objectify.annotation.Index;
+
+import farm.chaos.ppfax.persistance.Datastore;
+import farm.chaos.ppfax.utils.CategoryService;
 
 @Entity
 public class Article {
 
 	@Id 	private Long id;
 			private Long categoryId;
+			private Category categoryRef;
+			private String publicUri;
 			private String title;
 			private String headline;
 			private String teasertext;
@@ -19,6 +25,7 @@ public class Article {
 			private Date datePublished;
 			private String keywords;
 			private Long authorId;
+			private PpUser authorRef;
 	@Index	private PublicationStatus status;
 
 
@@ -39,6 +46,22 @@ public class Article {
 
 	public void setCategoryId(Long categoryId) {
 		this.categoryId = categoryId;
+	}
+
+	@JsonIgnore
+	public Category getCategory() {
+		if (categoryRef != null) return categoryRef;
+		if (categoryId == null) return null;
+		categoryRef = Datastore.getCategory(categoryId);
+		return categoryRef;
+	}
+
+	@JsonIgnore
+	public String getPublicUri() {
+		if (publicUri != null) return publicUri;
+		if (categoryId == null) return null;
+		publicUri = CategoryService.getArticlePath(this);
+		return publicUri;
 	}
 
 	public String getTitle() {
@@ -103,6 +126,15 @@ public class Article {
 
 	public void setAuthorId(Long authorId) {
 		this.authorId = authorId;
+		authorRef = null;
+	}
+
+	@JsonIgnore
+	public PpUser getAuthor() {
+		if (authorRef != null) return authorRef;
+		if (authorId == null) return null;
+		authorRef = Datastore.getPpUser(authorId);
+		return authorRef;
 	}
 
 	public PublicationStatus getStatus() {

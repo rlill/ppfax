@@ -8,6 +8,10 @@
 	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 	<title>PPFax</title>
 	<link rel="stylesheet" type="text/css" href="/ppfax.css" />
+	<script src="/jquery-3.1.1.min.js"></script>
+<%--
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+ --%>
 </head>
 <body>
 

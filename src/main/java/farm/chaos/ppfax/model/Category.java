@@ -16,7 +16,7 @@ public class Category {
 			private String name;
 	@Index	private String path;
 			private String sidebarcontent;
-			private Long parentId;
+	@Index	private Long parentId;
 			private Date dateCreated;
 	@Index	private Date dateModified;
 			private Long authorId;

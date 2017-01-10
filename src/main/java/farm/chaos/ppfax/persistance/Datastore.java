@@ -47,13 +47,12 @@ public class Datastore {
 
 	public static PpUser getPpUser(String email) {
 		LOG.log(Level.FINE, "Retrieve user email=" + email);
-		LOG.log(Level.INFO, "Retrieve user email=" + email);
 		PpUser user = (PpUser)syncCache.get(KEY_USER_EMAIL + email);
-		LOG.log(Level.INFO, "Cache: " + user);
+		LOG.log(Level.FINE, "Cache: " + user);
 		if (user != null) return user;
 
 		user = FeederObjectifyService.ofy().load().type(PpUser.class).filter("email", email).first().now();
-		LOG.log(Level.INFO, "Datastore: " + user);
+		LOG.log(Level.FINE, "Datastore: " + user);
 		if (user != null) syncCache.put(KEY_USER_EMAIL + email, user);
 		return user;
 	}
@@ -134,6 +133,15 @@ public class Datastore {
 		if (limit != 0) query = query.limit(limit);
 		query = query.order("path");
 		return query.list();
+	}
+
+	public static List<Category> getSubCategories(long parentId) {
+		LOG.log(Level.FINE, "Retrieve sub-categories of " + parentId);
+		return FeederObjectifyService.ofy()
+				.load()
+				.type(Category.class)
+				.filter("parentId", parentId)
+				.list();
 	}
 
 	public static Category getCategory(long id) {

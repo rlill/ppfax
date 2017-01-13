@@ -13,7 +13,7 @@ import farm.chaos.ppfax.persistance.Datastore;
 public class Paragraph {
 
 	@Id 	private Long id;
-			private Long articleId;
+	@Index	private Long articleId;
 			private String headline;
 			private String bodyText;
 	@Index	private Integer sequence;

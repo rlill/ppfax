@@ -58,95 +58,108 @@
 		</td>
 	</tr>
 	
+	<c:set var="seq" value="${0}"/>
+	
 <c:forEach var="paragraph" items="${paragraphs}">
-	<tr>
-		<td colspan="2"><hr/></td>
-	<tr>
-	<tr>
-		<th>Headline</th>
-		<td><input type="text" name="headline" value="${paragraph.headline}"/></td>
-	</tr>
-	<tr>
-		<th>Paragraph</th>
-		<td><textarea name="bodyText" rows="10"><c:out value="${'paragraph.bodyText'}"/></textarea></td>
-	</tr>
-	<tr>
-		<th>Image</th>
-		<td><img src="${paragraph.image.imageUrl}"/><br>${image.title}</td>
-	</tr>
-	<tr>
-		<th>Style</th>
-		<td>
-			<select name="style" size="1">
-				<c:forEach var="style" items="${ParagraphStyles}">
-					<c:set var="chk" value="${style.name eq paragraph.style.name ? 'selected' : ''}"/>
-					<option value="${style}" ${chk}>${style.name}</option>
-				</c:forEach>
-			</select>
-		</td>
-	</tr>
-	<tr>
-		<th></th>
-		<td>
-			<input type="button" value="remove" id="removeParagraph"/>
-			<input type="button" value="&darr;" id="moveDown"/>
-			<input type="button" value="&uarr;" id="moveUp"/>
-		</td>
-	</tr>
-	<tr>
-		<td colspan="2"><hr/></td>
-	<tr>
+	<c:set var="seq" value="${seq+1}"/>
+	<tbody id="paragraphEditor_${seq}" class="existingParagraph">
+		<input type="hidden" name="sequence_${seq}" value="${seq}"/>
+		<input type="hidden" name="paragraph_${seq}" value="${paragraph.id}"/>
+		<tr>
+			<td colspan="2"><hr/></td>
+		<tr>
+		<tr>
+			<th>Headline</th>
+			<td><input type="text" name="headline_${seq}" value="${paragraph.headline}"/></td>
+		</tr>
+		<tr>
+			<th>Paragraph</th>
+			<td><textarea name="bodyText_${seq}" rows="10"><c:out value="${paragraph.bodyText}"/></textarea></td>
+		</tr>
+		<tr>
+			<th>Image</th>
+			<td>
+				<c:if test="${not empty paragraph.imageId && paragraph.imageId gt 0}">
+					<img src="${paragraph.image.imageUrl}"/><br>${image.title}
+				</c:if>
+			</td>
+		</tr>
+		<tr>
+			<th>Style</th>
+			<td>
+				<select name="style_${seq}" size="1">
+					<c:forEach var="style" items="${ParagraphStyles}">
+						<c:set var="chk" value="${style.name eq paragraph.style.name ? 'selected' : ''}"/>
+						<option value="${style}" ${chk}>${style.name}</option>
+					</c:forEach>
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<th></th>
+			<td>
+				<input type="button" value="remove" class="removeParagraph"/>
+				<input type="button" value="&darr;" class="moveDown"/>
+				<input type="button" value="&uarr;" class="moveUp"/>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2"><hr/></td>
+		</tr>
+	</tbody>
 </c:forEach>
 	
 	<tbody id="paragraphTemplate" style="display:none">
-	<tr>
-		<td colspan="2"><hr/></td>
-	<tr>
-		<th>Headline</th>
-		<td><input type="text" name="headline"/></td>
-	</tr>
-	<tr>
-		<th>Paragraph</th>
-		<td><textarea name="bodyText" rows="10"></textarea></td>
-	</tr>
-	<tr>
-		<th>Image title</th>
-		<td><input type="text" name="title"></td>
-	</tr>
-	<tr>
-		<th>Image file</th>
-		<td><input type="file" name="image"></td>
-	</tr>
-	<tr>
-		<th>Style</th>
-		<td>
-			<select name="style" size="1">
-				<c:forEach var="style" items="${ParagraphStyles}">
-					<option value="${style}">${style.name}</option>
-				</c:forEach>
-			</select>
-		</td>
-	</tr>
-	<tr>
-		<th></th>
-		<td>
-			<input type="button" value="remove" id="removeParagraph"/>
-			<input type="button" value="&uarr;" id="moveUp"/>
-		</td>
-	</tr>
-	<tr>
-		<td colspan="2"><hr/></td>
-	<tr>
-	</tbody>
-	
-	<tbody id="controlRow">
-	<tr>
-		<th></th>
-		<td>
-			<input type="submit" value="save"/>
-			<input type="button" value="new paragraph" id="addParagraph"/>
-		</td>
-	</tr>
+		<input type="hidden" name="sequence" value="0"/>
+		<tr>
+			<td colspan="2"><hr/></td>
+		<tr>
+			<th>Headline</th>
+			<td><input type="text" name="headline"/></td>
+		</tr>
+		<tr>
+			<th>Paragraph</th>
+			<td><textarea name="bodyText" rows="10"></textarea></td>
+		</tr>
+		<tr>
+			<th>Image title</th>
+			<td><input type="text" name="title"></td>
+		</tr>
+		<tr>
+			<th>Image file</th>
+			<td><input type="file" name="image"></td>
+		</tr>
+		<tr>
+			<th>Style</th>
+			<td>
+				<select name="style" size="1">
+					<c:forEach var="style" items="${ParagraphStyles}">
+						<option value="${style}">${style.name}</option>
+					</c:forEach>
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<th></th>
+			<td>
+				<input type="button" value="remove" class="removeParagraph"/>
+				<input type="button" value="&uarr;" class="moveUp"/>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2"><hr/></td>
+		<tr>
+		</tbody>
+		
+		<tbody id="controlRow">
+		<tr>
+			<th></th>
+			<td>
+				<input type="hidden" name="pcount" id="pcount" value="${seq}"/>
+				<input type="submit" value="save"/>
+				<input type="button" value="new paragraph" id="addParagraph"/>
+			</td>
+		</tr>
 	</tbody>
 </table>
 </form>
@@ -154,15 +167,37 @@
 
 <script type="text/javascript" >
 
+var topParagraphIndex = ${seq};
+
 $(document).ready(function(){
 	
 	$('input#addParagraph').click(function(){
 		
-		$('tbody#paragraphTemplate')
+		topParagraphIndex++;
+		$('input#pcount').val(topParagraphIndex);
+		var editor = $('tbody#paragraphTemplate')
 			.clone()
-			.attr('id', '')
+			.attr('id', 'paragraphEditor_' + topParagraphIndex)
 			.show()
-			.insertBefore($('tbody#controlRow'));
+
+		editor.find('input[name=sequence]').val(topParagraphIndex);
+
+		editor.find('input,textarea,select').each(function(){
+			$(this).attr('name', $(this).attr('name') + '_' + topParagraphIndex);
+		});
+		
+		editor.find('input.removeParagraph').click(function(){
+			editor.remove();
+		});
+			
+		editor.insertBefore($('tbody#controlRow'));
+	});
+	
+	$('tbody.existingParagraph').each(function(){
+		var editor = $(this);
+		editor.find('input.removeParagraph').click(function(){
+			editor.remove();
+		});
 	});
 	
 });

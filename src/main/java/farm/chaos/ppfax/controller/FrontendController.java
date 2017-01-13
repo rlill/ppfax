@@ -44,8 +44,7 @@ public class FrontendController extends HttpServlet {
 				}
 
 				request.setAttribute("article", article);
-				request.setAttribute("category", Datastore.getCategory(article.getCategoryId()));
-				request.setAttribute("author", Datastore.getPpUser(article.getAuthorId()));
+				request.setAttribute("paragraphs", Datastore.getParagraphsForArticle(id));
 
 				RequestDispatcher rd = request.getRequestDispatcher("/articlepage.jsp");
 				rd.forward(request, response);

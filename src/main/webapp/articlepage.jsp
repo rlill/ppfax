@@ -22,7 +22,7 @@ Article
 	<p>${paragraph.bodyText}</p>
 </c:forEach>
 
-<i>${article.authorId}</i><br>
+<i>${article.author.name}</i><br>
 
 
 </body>

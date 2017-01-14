@@ -62,8 +62,8 @@
 	
 <c:forEach var="paragraph" items="${paragraphs}">
 	<c:set var="seq" value="${seq+1}"/>
-	<tbody id="paragraphEditor_${seq}" class="existingParagraph">
-		<input type="hidden" name="sequence_${seq}" value="${seq}"/>
+	<tbody id="paragraphEditor_${seq}" class="paragraphEditor existingParagraph">
+		<input type="hidden" name="sequence_${seq}" class="sequence" value="${seq}"/>
 		<input type="hidden" name="paragraph_${seq}" value="${paragraph.id}"/>
 		<tr>
 			<td colspan="2"><hr/></td>
@@ -110,7 +110,7 @@
 </c:forEach>
 	
 	<tbody id="paragraphTemplate" style="display:none">
-		<input type="hidden" name="sequence" value="0"/>
+		<input type="hidden" name="sequence" class="sequence" value="0"/>
 		<tr>
 			<td colspan="2"><hr/></td>
 		<tr>
@@ -169,6 +169,31 @@
 
 var topParagraphIndex = ${seq};
 
+moveParagraphUp = function(editor){
+	console.log("Up " + editor.find('input.sequence').val() + " = " + editor.attr('id'));
+	switchElements(editor, editor.prev('.paragraphEditor'));
+};
+
+moveParagraphDown = function(editor){
+	console.log("Down " + editor.find('input.sequence').val() + " = " + editor.attr('id'));
+	switchElements(editor, editor.next('.paragraphEditor'));
+};
+
+switchElements = function(el, sw){
+	var iel = el.find('input.sequence').val();
+	var isw = sw.find('input.sequence').val();
+	console.log("switch " + iel + " - " + isw);
+	if (iel > 0 && isw > 0) {
+	    var tmp = $('<span>').hide();
+	    el.before(tmp);
+	    sw.before(el);
+	    tmp.replaceWith(sw);
+
+	    el.find('input.sequence').val(isw);
+		sw.find('input.sequence').val(iel);
+	}
+}
+
 $(document).ready(function(){
 	
 	$('input#addParagraph').click(function(){
@@ -178,6 +203,7 @@ $(document).ready(function(){
 		var editor = $('tbody#paragraphTemplate')
 			.clone()
 			.attr('id', 'paragraphEditor_' + topParagraphIndex)
+			.addClass('paragraphEditor')
 			.show()
 
 		editor.find('input[name=sequence]').val(topParagraphIndex);
@@ -197,6 +223,12 @@ $(document).ready(function(){
 		var editor = $(this);
 		editor.find('input.removeParagraph').click(function(){
 			editor.remove();
+		});
+		editor.find('input.moveUp').click(function(){
+			moveParagraphUp($(this).parentsUntil('table.editor').last());
+		});
+		editor.find('input.moveDown').click(function(){
+			moveParagraphDown($(this).parentsUntil('table.editor').last());
 		});
 	});
 	

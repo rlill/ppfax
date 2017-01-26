@@ -15,16 +15,15 @@
 </head>
 <body>
 
-<table class="head">
-<tr>
-  <td>
+<div class="head">
+<div class="pplogo">
   	<h1>&Pi;&Pi;&Phi;&Alpha;&Xi;</h1>
-  </td>
-  <td class="username">
+</div>
+<div class="menu">
     <a href="/admin">Users</a>
     <a href="/article">Articles</a>
     <a href="/category">Categories</a>
     <a href="/swagger/index.html">API</a>
-  </td>
-</tr>
-</table>
+</div>
+<div class="clear"></div>
+</div>

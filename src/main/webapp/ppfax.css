@@ -27,19 +27,20 @@ table.grid td {
 	margin: 5px;
 }
 
-table.head {
-	width: 100%;
-	border-spacing: 0;
+div.head {
 	border: 2px solid #ff0;
-}
-table.head td {
-	vertical-align: bottom;
 	background-color: #ffa;
 	padding: 4px 2px;
 	color:#12c;
+	border-radius: 8px;
 }
-table.head td.username {
-	text-align: right;
+div.head div.pplogo {
+	float: left;
+}
+div.head div.menu {
+	float: right;
+	position: relative;
+	top: 22px;
 }
 
 table.editor th {

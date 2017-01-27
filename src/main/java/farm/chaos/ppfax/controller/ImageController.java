@@ -1,9 +1,7 @@
 package farm.chaos.ppfax.controller;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.nio.channels.Channels;
 import java.util.Date;
 import java.util.HashMap;
@@ -24,11 +22,11 @@ import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.fileupload.util.Streams;
 
+import com.google.appengine.api.appidentity.AppIdentityServiceFactory;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.appengine.tools.cloudstorage.GcsFileOptions;
 import com.google.appengine.tools.cloudstorage.GcsFilename;
-import com.google.appengine.tools.cloudstorage.GcsInputChannel;
 import com.google.appengine.tools.cloudstorage.GcsOutputChannel;
 import com.google.appengine.tools.cloudstorage.GcsService;
 import com.google.appengine.tools.cloudstorage.GcsServiceFactory;
@@ -54,8 +52,7 @@ public class ImageController extends HttpServlet {
 				    .totalRetryPeriodMillis(15000)
 				    .build());
 
-//    private String bucketName = "ppfax-cms.appspot.com"; // TODO: variable
-    private String bucketName = "blubberblubb"; // TODO: variable
+    private String bucketName = AppIdentityServiceFactory.getAppIdentityService().getDefaultGcsBucketName();
 
 	public void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
@@ -71,10 +68,6 @@ public class ImageController extends HttpServlet {
 	    	Image image = Datastore.getImage(imageId);
 	    	if (image != null) {
 	    		image.setTitle(request.getParameter("title"));
-//	    		image.setHeadline(request.getParameter("headline"));
-//	    		image.setTeasertext(request.getParameter("teasertext"));
-//	    		image.setCategoryId(StringUtils.atol(request.getParameter("categoryId")));
-//	    		image.setKeywords(request.getParameter("keywords"));
 	    		image.setStatus(PublicationStatus.valueOf(request.getParameter("status")));
 		    	image.setDateModified(new Date());
 
@@ -108,16 +101,6 @@ public class ImageController extends HttpServlet {
 
         	        if (stream != null && sname != null) {
         	        	storagePath = saveImage(stream, sname, sctype);
-
-
-        	        	// test:
-
-        	        	GcsFilename gcsfileName = new GcsFilename(bucketName, storagePath);
-        	    		GcsInputChannel readChannel = gcsService.openReadChannel(gcsfileName, 0);
-        	    		OutputStream bos = new ByteArrayOutputStream();
-        	    		long l = Streams.copy(Channels.newInputStream(readChannel), bos, false);
-
-        	    		LOG.info("read " + l + " bytes");
         	        }
 	            }
 	        }
@@ -132,11 +115,7 @@ public class ImageController extends HttpServlet {
 		    	Image image = new Image();
 				image.setTitle(postParameters.get("title"));
 				image.setStoragePath(storagePath);
-//	    		image.setHeadline(postParameters.get("headline"));
-//	    		image.setTeasertext(postParameters.get("teasertext"));
-//	    		image.setCategoryId(StringUtils.atol(postParameters.get("categoryId")));
-//	    		image.setKeywords(postParameters.get("keywords"));
-//				image.setStatus(PublicationStatus.valueOf(postParameters.get("status")));
+				image.setStatus(PublicationStatus.valueOf(postParameters.get("status")));
 
 		    	Date now = new Date();
 				image.setDateCreated(now);
@@ -153,16 +132,7 @@ public class ImageController extends HttpServlet {
 
 	private String saveImage(InputStream stream, String sname, String sctype) throws IOException {
 
-
-        //Generate string for my photo
-        String unique = UUID.randomUUID().toString();
-
-        //Open GCS File
-        GcsFilename gcsfileName = new GcsFilename(bucketName, unique+".jpg");
-
-//        GcsFilename gcsfileName = new GcsFilename(bucketName, sname);
-
-
+        GcsFilename gcsfileName = new GcsFilename(bucketName, UUID.randomUUID().toString());
 //        GcsFileOptions options = new GcsFileOptions.Builder()
 //        		.acl("public-read")
 //        		.mimeType(sctype)

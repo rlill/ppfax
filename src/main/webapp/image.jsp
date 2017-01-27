@@ -31,8 +31,9 @@
 	</tr>
 
 	<tr>
-		<td colspan="2">
-			<img src="/img/${image.id}" />
+		<th></th>
+		<td>
+			<img src="/img/3/${image.id}" />
 		</td>
 	</tr>
 
@@ -67,19 +68,34 @@
 		<td>${image.author.name}<br><fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${image.dateCreated}" timeZone="GMT" /></td>
 		<td>${image.status}</td>
 		<td>${image.storagePath}</td>
+		<td><img src="/img/1/${image.id}" /></td>
 	</tr>
 	
 </c:forEach>
 </c:if>
 
+	<form action="/image" method="POST" enctype="multipart/form-data">
+	<input type="hidden" name="action" value="addImage"/>
+	<tr>
+		<td><input type="text" name="title"></td>
+		<td></td>
+		<td>
+			<select name="status" size="1">
+				<c:forEach var="status" items="${publicationStatus}">
+					<c:set var="chk" value="${status.name eq image.status.name ? 'selected' : ''}"/>
+					<option value="${status}" ${chk}>${status.name}</option>
+				</c:forEach>
+			</select>
+		</td>
+		<td><input type="file" name="file"/></td>
+		<td><input type="submit" value="upload"/></td>
+	</tr>
+	</form> 
+
+
 </table>
 
 
-	<form action="/image" method="POST" enctype="multipart/form-data">
-		<input type="hidden" name="action" value="addImage"/>
-		<input type="file" name="file"/>
-		<input type="submit" value="upload"/>
-	</form> 
 
 
 </c:otherwise>

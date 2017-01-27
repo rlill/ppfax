@@ -30,11 +30,21 @@ public class StringUtils {
 		return (s != null && (s.equals("1") || s.equalsIgnoreCase("true") || s.equalsIgnoreCase("yes")));
 	}
 
+	// --> /article/123123123
 	public static long getIdFromUri(String requestURI) {
 		if (requestURI == null) return 0;
 		int p = requestURI.lastIndexOf('/');
 		if (p < 1 || p >= requestURI.length() - 1) return 0;
 		return atol(requestURI.substring(p + 1));
+	}
+
+	// --> /img/3/123123123
+	public static int getRnoFromUri(String requestURI) {
+		if (requestURI == null) return 0;
+		int p1 = requestURI.lastIndexOf('/');
+		int p2 = requestURI.lastIndexOf('/', p1 - 1);
+		if (p2 < 1 || p1 >= requestURI.length() - 1) return 0;
+		return atoi(requestURI.substring(p2 + 1, p1));
 	}
 
 	// --> /topic/topic/title-of-the-article-1234.html

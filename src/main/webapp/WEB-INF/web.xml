@@ -34,12 +34,30 @@
     </servlet-mapping>
 
     <servlet>
+        <servlet-name>Image</servlet-name>
+        <servlet-class>farm.chaos.ppfax.controller.ImageController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Image</servlet-name>
+        <url-pattern>/image/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
         <servlet-name>Frontend</servlet-name>
         <servlet-class>farm.chaos.ppfax.controller.FrontendController</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>Frontend</servlet-name>
         <url-pattern>/</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>Img</servlet-name>
+        <servlet-class>farm.chaos.ppfax.controller.ImageService</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Img</servlet-name>
+        <url-pattern>/img/*</url-pattern>
     </servlet-mapping>
 
     <!-- task-queue controller -->

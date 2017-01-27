@@ -6,6 +6,7 @@ import com.googlecode.objectify.ObjectifyService;
 
 import farm.chaos.ppfax.model.Article;
 import farm.chaos.ppfax.model.Category;
+import farm.chaos.ppfax.model.Image;
 import farm.chaos.ppfax.model.Paragraph;
 import farm.chaos.ppfax.model.PpUser;
 
@@ -16,6 +17,7 @@ public class FeederObjectifyService {
     	ObjectifyService.register(Category.class);
     	ObjectifyService.register(Article.class);
     	ObjectifyService.register(Paragraph.class);
+    	ObjectifyService.register(Image.class);
     	ObjectifyService.register(PpUser.class);
     }
 

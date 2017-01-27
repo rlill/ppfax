@@ -7,6 +7,8 @@ import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
 import com.googlecode.objectify.annotation.Index;
 
+import farm.chaos.ppfax.persistance.Datastore;
+
 @Entity
 public class Image {
 
@@ -16,6 +18,7 @@ public class Image {
 			private Date dateCreated;
 	@Index	private Date dateModified;
 			private Long authorId;
+			private PpUser authorRef;
 	@Index	private PublicationStatus status;
 
 	public Image() {
@@ -72,6 +75,15 @@ public class Image {
 
 	public void setAuthorId(Long authorId) {
 		this.authorId = authorId;
+		authorRef = null;
+	}
+
+	@JsonIgnore
+	public PpUser getAuthor() {
+		if (authorRef != null) return authorRef;
+		if (authorId == null) return null;
+		authorRef = Datastore.getPpUser(authorId);
+		return authorRef;
 	}
 
 	public PublicationStatus getStatus() {

@@ -22,6 +22,7 @@
 <div class="menu">
     <a href="/admin">Users</a>
     <a href="/article">Articles</a>
+    <a href="/image">Images</a>
     <a href="/category">Categories</a>
     <a href="/swagger/index.html">API</a>
 </div>

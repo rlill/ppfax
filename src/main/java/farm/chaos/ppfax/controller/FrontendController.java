@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.http.HttpStatus;
+
 import farm.chaos.ppfax.model.Article;
 import farm.chaos.ppfax.model.Category;
 import farm.chaos.ppfax.persistance.Datastore;
@@ -51,6 +53,7 @@ public class FrontendController extends HttpServlet {
 				return;
 			}
 
+			response.setStatus(HttpStatus.SC_NOT_FOUND);
 			RequestDispatcher rd = request.getRequestDispatcher("/notfoundpage.jsp");
 			rd.forward(request, response);
 			return;
@@ -71,6 +74,7 @@ public class FrontendController extends HttpServlet {
 		Category category = Datastore.getCategoryByPath(path);
 
 		if (category == null) {
+			response.setStatus(HttpStatus.SC_NOT_FOUND);
 			RequestDispatcher rd = request.getRequestDispatcher("/notfoundpage.jsp");
 			rd.forward(request, response);
 			return;

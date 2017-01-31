@@ -56,6 +56,10 @@ table.editor td {
 	margin: 5px;
 }
 
+table.searchform {
+	width: 600px;
+}
+
 form {
 	margin: 0;
 	padding: 0;

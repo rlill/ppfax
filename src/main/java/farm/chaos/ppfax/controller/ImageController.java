@@ -133,10 +133,6 @@ public class ImageController extends HttpServlet {
 	private String saveImage(InputStream stream, String sname, String sctype) throws IOException {
 
         GcsFilename gcsfileName = new GcsFilename(bucketName, UUID.randomUUID().toString());
-//        GcsFileOptions options = new GcsFileOptions.Builder()
-//        		.acl("public-read")
-//        		.mimeType(sctype)
-//        		.build();
         GcsFileOptions options = GcsFileOptions.getDefaultInstance();
 
         GcsOutputChannel outputChannel =

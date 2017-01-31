@@ -293,6 +293,17 @@ $(document).ready(function(){
 <c:otherwise>
 
 <h3>Articles</h3>
+
+<form action="/article" method="get">
+<table class="searchform">
+  <tr><td>
+    <input type="submit" value="search"/>
+  </td><td>
+    <input type="text" name="searchstring"/>
+  </td></tr>
+</table>
+</form>
+
 <table class="grid">
 
 	<tr>

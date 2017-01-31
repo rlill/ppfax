@@ -135,7 +135,14 @@ public class ArticleController extends HttpServlet {
 		if (request.getRequestURI().endsWith("/new"))
 			request.setAttribute("newArticle", "1");
 
-	    request.setAttribute("articles", Datastore.getArticles(null, 0, 10));
+		String searchString = request.getParameter("searchstring");
+		if (searchString != null && searchString.length() > 2) {
+			request.setAttribute("articles", Datastore.searchArticles(searchString, 0, 10));
+		}
+		else {
+			request.setAttribute("articles", Datastore.getArticles(0, 10));
+		}
+
     	request.setAttribute("categories", Datastore.getCategories(null, 0, 10));
     	request.setAttribute("publicationStatus", PublicationStatus.values());
 	    request.setAttribute("ParagraphStyles", ParagraphStyle.values());

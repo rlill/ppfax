@@ -70,7 +70,7 @@ public class AdminController extends HttpServlet {
 
     	ControllerUtils.setStandardFields(request, userService);
 
-	    request.setAttribute("users", Datastore.getPpUsers(null, 0, 10));
+	    request.setAttribute("users", Datastore.getPpUsers(0, 10));
 
 		RequestDispatcher rd = request.getRequestDispatcher("/admin.jsp");
 		rd.forward(request, response);

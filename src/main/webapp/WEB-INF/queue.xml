@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <queue-entries>
     <queue>
-        <name>todo</name>
-        <rate>1/s</rate>
+        <name>indexing</name>
+        <rate>10/s</rate>
         <max-concurrent-requests>5</max-concurrent-requests>
     </queue>
 </queue-entries>

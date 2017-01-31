@@ -143,7 +143,7 @@ public class ArticleController extends HttpServlet {
 			request.setAttribute("articles", Datastore.getArticles(0, 10));
 		}
 
-    	request.setAttribute("categories", Datastore.getCategories(null, 0, 10));
+    	request.setAttribute("categories", Datastore.getCategories(0, 0));
     	request.setAttribute("publicationStatus", PublicationStatus.values());
 	    request.setAttribute("ParagraphStyles", ParagraphStyle.values());
 

@@ -62,12 +62,12 @@
 
     <!-- task-queue controller -->
     <servlet>
-        <servlet-name>Protocol</servlet-name>
-        <servlet-class>farm.chaos.ppfax.controller.TaskController</servlet-class>
+        <servlet-name>Indexing</servlet-name>
+        <servlet-class>farm.chaos.ppfax.controller.IndexingController</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>Protocol</servlet-name>
-        <url-pattern>/protocol</url-pattern>
+        <servlet-name>Indexing</servlet-name>
+        <url-pattern>/indexing</url-pattern>
     </servlet-mapping>
 
     <!-- error controller -->

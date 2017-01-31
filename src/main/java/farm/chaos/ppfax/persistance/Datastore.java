@@ -23,6 +23,9 @@ import com.google.appengine.api.search.SearchServiceFactory;
 import com.google.appengine.api.search.SortExpression;
 import com.google.appengine.api.search.SortOptions;
 import com.google.appengine.api.search.StatusCode;
+import com.google.appengine.api.taskqueue.Queue;
+import com.google.appengine.api.taskqueue.QueueFactory;
+import com.google.appengine.api.taskqueue.TaskOptions;
 import com.googlecode.objectify.cmd.Query;
 
 import farm.chaos.ppfax.model.Article;
@@ -50,6 +53,8 @@ public class Datastore {
 
 	private static final String INDEX_FIELD_TITLE = "TITLE";
 	private static final String INDEX_FIELD_HEADLINE = "HEADLINE";
+	private static final String INDEX_FIELD_NAME = "NAME";
+	private static final String INDEX_FIELD_TEXT = "TEXT";
 	private static final String INDEX_FIELD_MODIFIED = "DATE_MODIFIED";
 
 	static {
@@ -65,8 +70,8 @@ public class Datastore {
         indexCategories = SearchServiceFactory.getSearchService().getIndex(indexSpec);
 	}
 
-	// index
-	private static void addToIndex(Index index, Document doc) {
+	// add to / update index
+	public static void addToIndex(Index index, Document doc) {
 		final int maxRetry = 3;
 		int attempts = 0;
 		int delay = 2;
@@ -86,7 +91,8 @@ public class Datastore {
 		}
 	}
 
-	private static List<Long> searchIndex(Index index, String queryString, int offset, int limit) {
+	// query index
+	public static List<Long> searchIndex(Index index, String queryString, int offset, int limit) {
 		final int maxRetry = 3;
 		int attempts = 0;
 		int delay = 2;
@@ -207,10 +213,26 @@ public class Datastore {
 		LOG.log(Level.FINE, "Save Article id = " + article.getId());
 		FeederObjectifyService.ofy().save().entity(article).now();
 
+		// queue task in re-indexing queue
+		Queue queue = QueueFactory.getQueue("indexing");
+		queue.add(TaskOptions.Builder.withUrl("/indexing").param("content-type", "article").param("id", Long.toString(article.getId())));
+	}
+
+	public static void updateArticleIndex(long id) {
+		LOG.log(Level.FINE, "Re-indexing article " + id);
+		Article article = FeederObjectifyService.ofy().load().type(Article.class).id(id).now();
+
+		StringBuilder text = new StringBuilder();
+		text.append(article.getTeasertext()).append(' ');
+		for (Paragraph p : getParagraphsForArticle(article.getId())) {
+			text.append(p.getHeadline()).append(' ');
+			text.append(p.getBodyText()).append(' ');
+		}
+
         Document doc = Document.newBuilder()
             .setId(Long.toString(article.getId()))
-            .addField(Field.newBuilder().setName(INDEX_FIELD_HEADLINE).setText(article.getHeadline()))
-            .addField(Field.newBuilder().setName(INDEX_FIELD_TITLE).setText(article.getTitle()))
+            .addField(Field.newBuilder().setName(INDEX_FIELD_HEADLINE).setText(article.getTitle() + " " + article.getHeadline()))
+            .addField(Field.newBuilder().setName(INDEX_FIELD_TEXT).setText(text.toString()))
             .addField(Field.newBuilder().setName(INDEX_FIELD_MODIFIED).setDate(article.getDateModified()))
             .build();
 
@@ -247,14 +269,24 @@ public class Datastore {
 	}
 
 	// Categories
-	public static List<Category> getCategories(String searchterm, int offset, int limit) {
+	public static List<Category> getCategories(int offset, int limit) {
 		LOG.log(Level.FINE, "Retrieve categories");
 		Query<Category> query = FeederObjectifyService.ofy().load().type(Category.class);
-		if (searchterm != null) query = query.filter("", ""); // TODO
 		if (offset != 0) query = query.offset(offset);
 		if (limit != 0) query = query.limit(limit);
 		query = query.order("path");
 		return query.list();
+	}
+
+	public static List<Category> searchCategories(String searchterm, int offset, int limit) {
+		LOG.log(Level.FINE, "Search categories");
+		List<Long> categoryIds = searchIndex(indexCategories, searchterm, offset, limit);
+		LOG.log(Level.INFO, "index search returned the IDs " +  categoryIds);
+		if (categoryIds.size() < 1) return new ArrayList<>();
+		Map<Long, Category> res =  FeederObjectifyService.ofy().load()
+				.type(Category.class)
+				.ids(categoryIds);
+		return new ArrayList<>(res.values());
 	}
 
 	public static List<Category> getSubCategories(long parentId) {
@@ -279,16 +311,34 @@ public class Datastore {
 	public static void saveCategory(Category category) {
 		LOG.log(Level.FINE, "Save category id=" + category.getId());
 		FeederObjectifyService.ofy().save().entity(category).now();
+
+        Document doc = Document.newBuilder()
+            .setId(Long.toString(category.getId()))
+            .addField(Field.newBuilder().setName(INDEX_FIELD_NAME).setText(category.getName()))
+            .addField(Field.newBuilder().setName(INDEX_FIELD_MODIFIED).setDate(category.getDateModified()))
+            .build();
+
+		addToIndex(indexCategories, doc);
 	}
 
 	// Images
-	public static List<Image> getImages(String searchterm, int offset, int limit) {
+	public static List<Image> getImages(int offset, int limit) {
 		LOG.log(Level.FINE, "Retrieve images");
 		Query<Image> query = FeederObjectifyService.ofy().load().type(Image.class);
-		if (searchterm != null) query = query.filter("", ""); // TODO
 		if (offset != 0) query = query.offset(offset);
 		if (limit != 0) query = query.limit(limit);
 		return query.list();
+	}
+
+	public static List<Image> searchImages(String searchterm, int offset, int limit) {
+		LOG.log(Level.FINE, "Search images");
+		List<Long> imageIds = searchIndex(indexImages, searchterm, offset, limit);
+		LOG.log(Level.INFO, "index search returned the IDs " +  imageIds);
+		if (imageIds.size() < 1) return new ArrayList<>();
+		Map<Long, Image> res =  FeederObjectifyService.ofy().load()
+				.type(Image.class)
+				.ids(imageIds);
+		return new ArrayList<>(res.values());
 	}
 
 	public static Image getImage(long id) {
@@ -299,6 +349,14 @@ public class Datastore {
 	public static void saveImage(Image image) {
 		LOG.log(Level.FINE, "Save Image id = " + image.getId());
 		FeederObjectifyService.ofy().save().entity(image).now();
+
+        Document doc = Document.newBuilder()
+            .setId(Long.toString(image.getId()))
+            .addField(Field.newBuilder().setName(INDEX_FIELD_TITLE).setText(image.getTitle()))
+            .addField(Field.newBuilder().setName(INDEX_FIELD_MODIFIED).setDate(image.getDateModified()))
+            .build();
+
+		addToIndex(indexImages, doc);
 	}
 
 }

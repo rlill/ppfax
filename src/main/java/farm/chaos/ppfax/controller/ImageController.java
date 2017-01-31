@@ -163,8 +163,15 @@ public class ImageController extends HttpServlet {
 			request.setAttribute("image", Datastore.getImage(id));
 		}
 
+		String searchString = request.getParameter("searchstring");
+		if (searchString != null && searchString.length() > 2) {
+	    	request.setAttribute("images", Datastore.searchImages(searchString, 0, 10));
+		}
+		else {
+	    	request.setAttribute("images", Datastore.getImages(0, 10));
+		}
+
 		request.setAttribute("publicationStatus", PublicationStatus.values());
-    	request.setAttribute("images", Datastore.getImages(null, 0, 10));
 
 		RequestDispatcher rd = request.getRequestDispatcher("/image.jsp");
 		rd.forward(request, response);

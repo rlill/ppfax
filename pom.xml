@@ -13,7 +13,7 @@
     <properties>
         <app.id>ppfax-cms</app.id>
         <app.version>1</app.version>
-        <appengine.version>1.9.48</appengine.version>
+        <appengine.version>1.9.49</appengine.version>
         <gcloud.plugin.version>2.0.9.121.v20160815</gcloud.plugin.version>
         <google-api-client.version>1.22.0</google-api-client.version>
         <swagger-maven-plugin-version>3.1.0</swagger-maven-plugin-version>

@@ -108,7 +108,14 @@ public class CategoryController extends HttpServlet {
 		if (request.getRequestURI().endsWith("/new"))
 			request.setAttribute("newCategory", "1");
 
-    	request.setAttribute("categories", Datastore.getCategories(null, 0, 10));
+		String searchString = request.getParameter("searchstring");
+		if (searchString != null && searchString.length() > 2) {
+	    	request.setAttribute("categories", Datastore.searchCategories(searchString, 0, 10));
+		}
+		else {
+	    	request.setAttribute("categories", Datastore.getCategories(0, 10));
+		}
+
 	    request.setAttribute("publicationStatus", PublicationStatus.values());
 
 		RequestDispatcher rd = request.getRequestDispatcher("/category.jsp");

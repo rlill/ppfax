@@ -2,6 +2,7 @@
 <%@ taglib uri='http://java.sun.com/jsp/jstl/core' prefix='c'%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="ppf" tagdir="/WEB-INF/tags" %>
 
 <%@include file="header.jsp"%>
 
@@ -9,6 +10,8 @@
 <c:when test="${not empty image}">
 
 <h3>Image ${image.id}</h3>
+
+<ppf:listmenu type="image"/>
 
 <form action="/image" method="POST">
 <input type="hidden" name="action" value="updateImage"/>
@@ -51,6 +54,9 @@
 <c:otherwise>
 
 <h3>Images</h3>
+
+<ppf:listmenu type="image"/>
+
 <table class="grid">
 
 	<tr>

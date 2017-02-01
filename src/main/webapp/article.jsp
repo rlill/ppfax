@@ -2,11 +2,14 @@
 <%@ taglib uri='http://java.sun.com/jsp/jstl/core' prefix='c'%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="ppf" tagdir="/WEB-INF/tags" %>
 
 <%@include file="header.jsp"%>
 
 <c:choose>
 <c:when test="${not empty article}">
+
+<ppf:listmenu type="article"/>
 
 <h3>Article ${article.id}</h3>
 
@@ -241,6 +244,8 @@ $(document).ready(function(){
 </c:when>
 <c:when test="${not empty newArticle}">
 
+<ppf:listmenu type="article"/>
+
 <h3>New Article</h3>
 
 <form action="/article" method="POST">
@@ -292,17 +297,9 @@ $(document).ready(function(){
 </c:when>
 <c:otherwise>
 
-<h3>Articles</h3>
+<ppf:listmenu type="article"/>
 
-<form action="/article" method="get">
-<table class="searchform">
-  <tr><td>
-    <input type="submit" value="search"/>
-  </td><td>
-    <input type="text" name="searchstring"/>
-  </td></tr>
-</table>
-</form>
+<h3>Articles</h3>
 
 <table class="grid">
 
@@ -327,10 +324,6 @@ $(document).ready(function(){
 </c:if>
 
 </table>
-
-<form action="/article/new" method="GET">
-	<input type="submit" value="new"/>
-</form>
 
 </c:otherwise>
 </c:choose>

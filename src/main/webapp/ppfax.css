@@ -43,6 +43,20 @@ div.head div.menu {
 	top: 22px;
 }
 
+div.listmenu {
+	width: 800px;
+	border: 2px solid #ff0;
+	border-radius: 8px;
+	padding: 8px;
+	margin: 20px 0;
+}
+div.listmenu div.searchform {
+	float: left;
+}
+div.listmenu div.listmenuitem {
+	float:left;
+}
+
 table.editor th {
 	width: 150px;
 	text-align: right;
@@ -59,6 +73,13 @@ table.editor td {
 table.searchform {
 	width: 600px;
 }
+table.searchform th {
+	width: 100px;
+	padding: 0;
+}
+table.searchform td {
+	padding: 0;
+}
 
 form {
 	margin: 0;
@@ -71,8 +92,9 @@ select {
 	border: 0;
 	border-bottom: 2px solid #ddd;
 	background-color: #fff;
-	padding: 5px 0;
-	margin: 0;
+	padding: 2px 0;
+	margin: 5px 0;
+	line-height: 20px;
 	width: 100%;
 	outline: none;
 }

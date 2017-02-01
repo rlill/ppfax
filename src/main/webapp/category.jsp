@@ -2,6 +2,7 @@
 <%@ taglib uri='http://java.sun.com/jsp/jstl/core' prefix='c'%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="ppf" tagdir="/WEB-INF/tags" %>
 
 <%@include file="header.jsp"%>
 
@@ -9,6 +10,8 @@
 <c:when test="${not empty category}">
 
 <h3>Category</h3>
+
+<ppf:listmenu type="category"/>
 
 <form action="/category" method="POST">
 <input type="hidden" name="action" value="updateCategory"/>
@@ -67,6 +70,8 @@
 
 <h3>New Category</h3>
 
+<ppf:listmenu type="category"/>
+
 <form action="/category" method="POST">
 <input type="hidden" name="action" value="addCategory"/>
 <table class="editor">
@@ -119,6 +124,9 @@
 
 
 <h3>Categories</h3>
+
+<ppf:listmenu type="category"/>
+
 <table class="grid">
 
 	<tr>

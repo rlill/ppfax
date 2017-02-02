@@ -40,7 +40,34 @@ div.head div.pplogo {
 div.head div.menu {
 	float: right;
 	position: relative;
-	top: 22px;
+	top: 14px;
+}
+div.menu ul {
+	list-style-type: none;
+    height: 18px;
+    padding: 0;
+    margin: 0;
+}
+div.menu ul li {
+	float: left;
+    padding: 4px 8px;
+    margin: 0 5px;
+    border: 2px solid #24f;
+    border-radius: 5px;
+    text-indent: 0;
+    background-color: #48f;
+    color: #fff;
+}
+div.menu ul li.active {
+	background-color: #ffa;
+	border: 0;
+}
+div.menu ul li a {
+    color: #fff;
+    text-decoration: none;
+}
+div.menu ul li.active a {
+    color: #48f;
 }
 
 div.listmenu {
@@ -71,7 +98,7 @@ table.editor td {
 }
 
 table.searchform {
-	width: 600px;
+	width: 550px;
 }
 table.searchform th {
 	width: 100px;

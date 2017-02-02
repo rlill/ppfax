@@ -4,9 +4,10 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.google.appengine.api.users.UserService;
 
+import farm.chaos.ppfax.model.PpUser;
 import farm.chaos.ppfax.model.UserRole;
-import farm.chaos.ppfax.model.UserStatus;
 import farm.chaos.ppfax.persistance.Datastore;
+import farm.chaos.ppfax.utils.PermissionService;
 
 public class ControllerUtils {
 
@@ -15,9 +16,8 @@ public class ControllerUtils {
 	    request.setAttribute("loginUrl", userService.createLoginURL("/admin"));
 	    request.setAttribute("logoutUrl", userService.createLogoutURL("/admin"));
 	    request.setAttribute("googleUser", userService.getCurrentUser());
-		request.setAttribute("ppUser", Datastore.getPpUser(userService.getCurrentUser().getEmail()));
-
-		request.setAttribute("userRoles", UserRole.values());
-		request.setAttribute("userStatus", UserStatus.values());
+	    PpUser ppUser = Datastore.getPpUser(userService.getCurrentUser().getEmail());
+		request.setAttribute("ppUser", ppUser);
+		request.setAttribute("admin", PermissionService.checkRole(UserRole.ADMIN, ppUser.getRole()));
 	}
 }

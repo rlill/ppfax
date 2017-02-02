@@ -67,10 +67,11 @@ public class AdminController extends HttpServlet {
 		}
 
 		PermissionService.validatePermission(userService, UserRole.ADMIN);
-
     	ControllerUtils.setStandardFields(request, userService);
 
 	    request.setAttribute("users", Datastore.getPpUsers(0, 10));
+		request.setAttribute("userRoles", UserRole.values());
+		request.setAttribute("userStatus", UserStatus.values());
 
 		RequestDispatcher rd = request.getRequestDispatcher("/admin.jsp");
 		rd.forward(request, response);

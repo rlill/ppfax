@@ -4,14 +4,14 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="ppf" tagdir="/WEB-INF/tags" %>
 
-<%@include file="header.jsp"%>
+<ppf:header type="image"/>
 
 <c:choose>
 <c:when test="${not empty image}">
 
 <h3>Image ${image.id}</h3>
 
-<ppf:listmenu type="image"/>
+<ppf:listmenu type="image" back="true"/>
 
 <form action="/image" method="POST">
 <input type="hidden" name="action" value="updateImage"/>

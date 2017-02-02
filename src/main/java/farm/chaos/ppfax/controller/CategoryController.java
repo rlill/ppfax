@@ -97,8 +97,8 @@ public class CategoryController extends HttpServlet {
 			return;
 		}
 
-		PpUser user = new PpUser();
-		PermissionService.validatePermission(userService, UserRole.READER, user);
+		PermissionService.validatePermission(userService, UserRole.READER, null);
+    	ControllerUtils.setStandardFields(request, userService);
 
 		long id = StringUtils.getIdFromUri(request.getRequestURI());
 		if (id > 0) {

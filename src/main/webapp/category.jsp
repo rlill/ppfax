@@ -4,7 +4,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="ppf" tagdir="/WEB-INF/tags" %>
 
-<%@include file="header.jsp"%>
+<ppf:header type="category"/>
 
 <c:choose>
 <c:when test="${not empty category}">

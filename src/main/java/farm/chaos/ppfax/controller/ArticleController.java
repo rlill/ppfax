@@ -124,6 +124,7 @@ public class ArticleController extends HttpServlet {
 		}
 
 		PermissionService.validatePermission(userService, UserRole.READER, null);
+    	ControllerUtils.setStandardFields(request, userService);
 
 		long id = StringUtils.getIdFromUri(request.getRequestURI());
 

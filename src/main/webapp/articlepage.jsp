@@ -20,10 +20,14 @@ Article
 <c:forEach var="paragraph" items="${paragraphs}">
 	<u>${paragraph.headline}</u><br>
 	<p>${paragraph.bodyText}</p>
+	<c:if test="${not empty paragraph.image}">
+		<img src="/img/4/${paragraph.image.id}"/>
+	</c:if>
 </c:forEach>
 
+<p>
 <i>${article.author.name}</i><br>
-
+</p>
 
 </body>
 </html>

@@ -9,7 +9,7 @@
 <c:choose>
 <c:when test="${not empty article}">
 
-<ppf:listmenu type="article"/>
+<ppf:listmenu type="article" back="true"/>
 
 <h3>Article ${article.id}</h3>
 
@@ -82,9 +82,12 @@
 		<tr>
 			<th>Image</th>
 			<td>
+<%--
 				<c:if test="${not empty paragraph.imageId && paragraph.imageId gt 0}">
 					<img src="${paragraph.image.imageUrl}"/><br>${image.title}
 				</c:if>
+ --%>
+ 				<ppf:imageselect index="_${seq}" />
 			</td>
 		</tr>
 		<tr>
@@ -130,7 +133,7 @@
 		</tr>
 		<tr>
 			<th>Image file</th>
-			<td><input type="file" name="image"></td>
+			<td><ppf:imageselect index="" /></td>
 		</tr>
 		<tr>
 			<th>Style</th>
@@ -244,7 +247,7 @@ $(document).ready(function(){
 </c:when>
 <c:when test="${not empty newArticle}">
 
-<ppf:listmenu type="article"/>
+<ppf:listmenu type="article" back="true"/>
 
 <h3>New Article</h3>
 

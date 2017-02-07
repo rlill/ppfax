@@ -2,6 +2,7 @@ package farm.chaos.ppfax.controller;
 
 import java.net.URI;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -21,6 +22,7 @@ import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 
 import farm.chaos.ppfax.model.Article;
+import farm.chaos.ppfax.model.Image;
 import farm.chaos.ppfax.model.PpUser;
 import farm.chaos.ppfax.model.PublicationStatus;
 import farm.chaos.ppfax.model.UserRole;
@@ -140,6 +142,28 @@ public class ApiController extends Application {
     	Datastore.saveArticle(article);
 
     	return Response.ok().build();
+    }
+
+    @GET
+    @ApiOperation(value = "search images", response = Response.class)
+    @Path("/image/search/{searchterm}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response searchImage(@PathParam("searchterm") String searchterm) throws ServletException {
+
+    	LOG.log(Level.INFO, "searchImage(" + searchterm + ")");
+
+		UserService userService = UserServiceFactory.getUserService();
+		PermissionService.validatePermission(userService, UserRole.READER);
+
+		List<Image> result;
+		if (searchterm == null || searchterm.isEmpty())
+			result = Datastore.getImages(0, 10);
+		else
+			result = Datastore.searchImages(searchterm, 0, 10);
+
+    	if (result.size() < 1) return Response.status(Response.Status.NOT_FOUND).build();
+
+    	return Response.ok().entity(result).build();
     }
 
 }

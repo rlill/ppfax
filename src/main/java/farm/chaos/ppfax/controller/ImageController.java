@@ -75,6 +75,17 @@ public class ImageController extends HttpServlet {
 	    		Datastore.saveImage(image);
 	    	}
 	    }
+	    else if (action != null && imageId > 0 && action.equals("deleteImage")) {
+	    	String answer = request.getParameter("answer");
+			PermissionService.validatePermission(userService, UserRole.ADMIN);
+	    	Image image = Datastore.getImage(imageId);
+	    	if (image != null && answer != null && answer.equals("OK")) {
+	            GcsFilename gcsfileName = new GcsFilename(bucketName, image.getStoragePath());
+	            boolean success = gcsService.delete(gcsfileName);
+	    		LOG.log(Level.INFO, "Delete " + image + ": " + success);
+	    		Datastore.deleteImage(imageId);
+	    	}
+	    }
 	    else if (ServletFileUpload.isMultipartContent(request)) {
 
 	    	Map<String, String> postParameters = new HashMap<>();
@@ -161,6 +172,22 @@ public class ImageController extends HttpServlet {
 		long id = StringUtils.getIdFromUri(request.getRequestURI());
 
 		if (id > 0) {
+
+			// delete -> question dialog
+			if (request.getRequestURI().contains("/delete/")) {
+
+				request.setAttribute("type", "image");
+				request.setAttribute("title", "Delete image");
+				request.setAttribute("question", "Are you sure?");
+				request.setAttribute("action", "deleteImage");
+				request.setAttribute("id", id);
+				request.setAttribute("dialog", "okcancel");
+
+				RequestDispatcher rd = request.getRequestDispatcher("/dialog.jsp");
+				rd.forward(request, response);
+				return;
+			}
+
 			request.setAttribute("image", Datastore.getImage(id));
 		}
 

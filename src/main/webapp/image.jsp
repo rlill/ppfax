@@ -44,6 +44,13 @@
 		<th></th>
 		<td>
 			<input type="submit" value="save"/>
+			
+<c:if test="${admin}">
+			<a href="/image/delete/${image.id}">
+				<input type="button" value="delete"/>
+			</a>
+</c:if>
+
 		</td>
 	</tr>
 

@@ -83,6 +83,25 @@
           }
         }
       }
+    },
+    "/v1/image/search/{searchterm}" : {
+      "get" : {
+        "summary" : "search images",
+        "description" : "",
+        "operationId" : "searchImage",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "searchterm",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "default" : {
+            "description" : "successful operation"
+          }
+        }
+      }
     }
   },
   "definitions" : {

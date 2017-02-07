@@ -84,6 +84,62 @@ div.listmenu div.listmenuitem {
 	float:left;
 }
 
+div.imgdlg {
+	border: 1px solid #ddd;
+}
+div.imgdlghead {
+	border: 1px solid #ddd;
+    background-color: #48f;
+}
+div.imgdlgbody {
+	border: 1px solid #ddd;
+	height: 130px;
+	overflow: hidden;
+}
+
+
+div.imgdlghead ul {
+	list-style-type: none;
+    height: 16px;
+    padding: 0;
+    margin: 0;
+}
+div.imgdlghead ul li {
+	float: left;
+    padding: 4px 8px;
+    text-indent: 0;
+    border-left: 1px solid #24f;
+    border-top: 1px solid #24f;
+    border-right: 1px solid #24f;
+    background-color: #48f;
+    color: #fff;
+}
+div.imgdlghead ul li.active {
+	background-color: #fff;
+    border-bottom: 1px solid #fff;
+}
+div.imgdlghead ul li a {
+    color: #fff;
+    text-decoration: none;
+}
+div.imgdlghead ul li.active a {
+    color: #48f;
+}
+div.imgdlgbody table th {
+	width: 70px;
+}
+
+div.vscroll {
+	overflow-y: scroll;
+	height: 100%;
+	width: 100%;
+}
+div.vscroll div.imglistitem {
+    padding: 3px;
+	width: 100px;
+	float: left;
+}
+
 table.editor th {
 	width: 150px;
 	text-align: right;
@@ -107,6 +163,7 @@ table.searchform th {
 table.searchform td {
 	padding: 0;
 }
+
 
 form {
 	margin: 0;

@@ -26,11 +26,11 @@
 <div class="menu">
 <ul>
 	<c:if test="${admin}">
-		<li><a class="${type eq 'user' ? 'active' : ''}" href="/admin">Users</a></li>
+		<li class="${type eq 'user' ? 'active' : ''}"><a href="/admin">Users</a></li>
 	</c:if>
-    <li><a class="${type eq 'article' ? 'active' : ''}" href="/article">Articles</a></li>
-    <li><a class="${type eq 'image' ? 'active' : ''}" href="/image">Images</a></li>
-    <li><a class="${type eq 'category' ? 'active' : ''}" href="/category">Categories</a></li>
+    <li class="${type eq 'article' ? 'active' : ''}"><a href="/article">Articles</a></li>
+    <li class="${type eq 'image' ? 'active' : ''}"><a href="/image">Images</a></li>
+    <li class="${type eq 'category' ? 'active' : ''}"><a href="/category">Categories</a></li>
 	<c:if test="${admin}">
 	    <li><a target="_blank" href="/swagger/index.html">API</a></li>
 	</c:if>

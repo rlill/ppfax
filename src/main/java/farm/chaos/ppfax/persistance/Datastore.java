@@ -327,6 +327,7 @@ public class Datastore {
 		Query<Image> query = FeederObjectifyService.ofy().load().type(Image.class);
 		if (offset != 0) query = query.offset(offset);
 		if (limit != 0) query = query.limit(limit);
+		query = query.order("-dateModified");
 		return query.list();
 	}
 
@@ -357,6 +358,11 @@ public class Datastore {
             .build();
 
 		addToIndex(indexImages, doc);
+	}
+
+	public static void deleteImage(long id) {
+		LOG.log(Level.FINE, "Delete image id=" + id);
+		FeederObjectifyService.ofy().delete().type(Image.class).id(id).now();
 	}
 
 }

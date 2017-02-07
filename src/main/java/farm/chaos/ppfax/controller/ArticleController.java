@@ -108,7 +108,7 @@ public class ArticleController extends HttpServlet {
 		paragraph.setSequence(sequence);
 		paragraph.setHeadline(request.getParameter("headline_" + index));
 		paragraph.setBodyText(request.getParameter("bodyText_" + index));
-		paragraph.setImageId(0L /* TODO: image */);
+		paragraph.setImageId(StringUtils.atol(request.getParameter("imageId_" + index)));
 		paragraph.setStyle(ParagraphStyle.valueOf(request.getParameter("style_" + index)));
 
 		Datastore.saveParagraph(paragraph);

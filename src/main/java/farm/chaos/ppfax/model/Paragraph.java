@@ -102,7 +102,7 @@ public class Paragraph {
 	@JsonIgnore
 	public Image getImage() {
 		if (imageRef != null) return imageRef;
-		if (imageId == null) return null;
+		if (imageId == null || imageId == 0) return null;
 		imageRef = Datastore.getImage(imageId);
 		return imageRef;
 	}

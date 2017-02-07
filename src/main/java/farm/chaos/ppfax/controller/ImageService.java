@@ -83,15 +83,21 @@ public class ImageService extends HttpServlet {
         	t = ImagesServiceFactory.makeResize(50, 50, false);
         	break;
         case 2:
-        	t = ImagesServiceFactory.makeResize(200, 200, false);
+        	t = ImagesServiceFactory.makeResize(75, 75, false);
         	break;
         case 3:
-        	t = ImagesServiceFactory.makeResize(400, 400, false);
+        	t = ImagesServiceFactory.makeResize(100, 100, false);
         	break;
         case 4:
-        	t = ImagesServiceFactory.makeResize(600, 600, false);
+        	t = ImagesServiceFactory.makeResize(200, 200, false);
         	break;
         case 5:
+        	t = ImagesServiceFactory.makeResize(400, 400, false);
+        	break;
+        case 6:
+        	t = ImagesServiceFactory.makeResize(600, 600, false);
+        	break;
+        case 7:
             t = ImagesServiceFactory.makeResize(800, 800, false);
             break;
         }

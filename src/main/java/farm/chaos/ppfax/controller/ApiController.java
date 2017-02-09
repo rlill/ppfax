@@ -156,7 +156,7 @@ public class ApiController extends Application {
 		PermissionService.validatePermission(userService, UserRole.READER);
 
 		List<Image> result;
-		if (searchterm == null || searchterm.isEmpty())
+		if (searchterm == null || searchterm.isEmpty() || searchterm.equals("*"))
 			result = Datastore.getImages(0, 10);
 		else
 			result = Datastore.searchImages(searchterm, 0, 10);

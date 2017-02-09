@@ -1,0 +1,65 @@
+body {
+  font-family : Verdana, Arial, sans-serif;
+  font-size : 12pt;
+}
+
+h1 {
+	font-size: 16pt;
+	margin: 20px 0 5px 0;
+	padding: 0;
+}
+
+h2 {
+	font-size: 14pt;
+	margin: 20px 0 5px 0;
+	padding: 0;
+}
+
+h3 {
+	font-size: 12pt;
+	margin: 20px 0 5px 0;
+	padding: 0;
+}
+
+div.head {
+	border: 1px solid #ddd;
+	width: 1024px;
+}
+
+div.content {
+	border: 1px solid #ddd;
+	width: 800px;
+	float: left;
+}
+
+div.sidebar {
+	border: 1px solid #ddd;
+	width: 224px;
+	float: left;
+}
+
+div.footer {
+	border: 1px solid #ddd;
+	width: 1024px;
+	float: left;
+}
+
+
+div.content div {
+	border: 1px solid red;
+	padding: 10px;
+}
+
+div.content p {
+	display: inline-block;
+	line-height: 16pt;
+}
+div.content img {
+	border: 0;
+	padding: 10px;
+}
+
+
+.clear {
+  clear: both;
+}

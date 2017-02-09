@@ -2,12 +2,13 @@
 <%@ taglib uri='http://java.sun.com/jsp/jstl/core' prefix='c'%>
 
 <%@ attribute name="index" required="true" type="java.lang.String" %>
+<%@ attribute name="value" required="false" type="java.lang.String" %>
 
 <jsp:useBean id="random" class="farm.chaos.ppfax.utils.RandomBean" scope="application" />
 <c:set var="iid" value="${random.nextId}" />
 
 <div class="imgdlg" id="${iid}">
-	<input type="hidden" name="imageId${index}"/>
+	<input type="hidden" name="imageId${index}" value="${value}" />
 	<div class="imgdlghead">
 		<ul>
 			<li title="search" class="active"><a class="tabhead" href="#">Search</a></li>
@@ -21,7 +22,7 @@
 		<tr><th>
 			<input type="button" value="&#x1F50D;"/>
 		</th><td>
-			<input type="text"/>
+			<input type="text" value="*" />
 		</td></tr></table>
 	</div>
 	<div class="imgdlgbody searchresult" style="display:none">

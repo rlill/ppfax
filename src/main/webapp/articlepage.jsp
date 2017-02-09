@@ -7,27 +7,64 @@
 <head>
 	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 	<title>PPFax</title>
-	<link rel="stylesheet" type="text/css" href="/ppfax.css" />
+	<link rel="stylesheet" type="text/css" href="/style.css" />
 </head>
 <body>
 
-Article
 
-<h3>${article.title}</h3>
-<h2>${article.headline}</h2>
-<p><b>${article.teasertext}</b></p>
+<div class="head">
+&Pi;&Pi;&Phi;&Alpha;&Xi; demo site
+</div>
+
+<div class="content">
+<h2><c:out value="${article.title}"/></h2>
+<h1><c:out value="${article.headline}"/></h1>
+<p><b><c:out value="${article.teasertext}"/></b></p>
 
 <c:forEach var="paragraph" items="${paragraphs}">
-	<u>${paragraph.headline}</u><br>
-	<p>${paragraph.bodyText}</p>
-	<c:if test="${not empty paragraph.image}">
-		<img src="/img/4/${paragraph.image.id}"/>
-	</c:if>
+<div>
+	<h3><c:out value="${paragraph.headline}"/></h3>
+
+	<c:choose>
+	<c:when test="${paragraph.style eq 'WIDE_IMAGE'}">
+
+		<c:if test="${not empty paragraph.image}">
+			<img src="/img/6/${paragraph.image.id}"/>
+		</c:if>
+
+		<p><c:out value="${paragraph.bodyText}"/></p>
+
+	</c:when>
+	<c:when test="${paragraph.style eq 'IMAGE_LEFT'}">
+
+		<p>
+			<c:if test="${not empty paragraph.image}">
+				<img src="/img/4/${paragraph.image.id}" align="left"/>
+			</c:if>
+			<c:out value="${paragraph.bodyText}"/>
+		</p>
+
+	</c:when>
+	<c:when test="${paragraph.style eq 'IMAGE_RIGHT'}">
+
+		<p>
+			<c:if test="${not empty paragraph.image}">
+				<img src="/img/4/${paragraph.image.id}" align="right"/>
+			</c:if>
+			<c:out value="${paragraph.bodyText}"/>
+		</p>
+
+	</c:when>
+	</c:choose>
+
+</div>
 </c:forEach>
 
 <p>
 <i>${article.author.name}</i><br>
 </p>
+
+</div><%-- content --%>
 
 </body>
 </html>

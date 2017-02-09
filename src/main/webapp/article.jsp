@@ -76,18 +76,29 @@
 			<td><input type="text" name="headline_${seq}" value="${paragraph.headline}"/></td>
 		</tr>
 		<tr>
-			<th>Paragraph</th>
+			<th>Text</th>
 			<td><textarea name="bodyText_${seq}" rows="10"><c:out value="${paragraph.bodyText}"/></textarea></td>
 		</tr>
 		<tr>
 			<th>Image</th>
 			<td>
-<%--
-				<c:if test="${not empty paragraph.imageId && paragraph.imageId gt 0}">
-					<img src="${paragraph.image.imageUrl}"/><br>${image.title}
-				</c:if>
- --%>
- 				<ppf:imageselect index="_${seq}" />
+				<c:choose>
+				<c:when test="${not empty paragraph.imageId && paragraph.imageId gt 0}">
+					<div class="imgchg">
+					<div class="fix">
+						<img src="/img/4/${paragraph.image.id}"/>
+						<input type="button" value="change"/>
+						<br>${paragraph.image.title}
+					</div>
+					<div class="dlg" style="display:none;">
+	 					<ppf:imageselect index="_${seq}" value="${paragraph.image.id}" />
+					</div>
+					</div>
+				</c:when>
+				<c:otherwise>
+	 				<ppf:imageselect index="_${seq}" />
+				</c:otherwise>
+				</c:choose>	
 			</td>
 		</tr>
 		<tr>
@@ -102,7 +113,7 @@
 			</td>
 		</tr>
 		<tr>
-			<th></th>
+			<th>Paragraph</th>
 			<td>
 				<input type="button" value="remove" class="removeParagraph"/>
 				<input type="button" value="&darr;" class="moveDown"/>
@@ -124,7 +135,7 @@
 			<td><input type="text" name="headline"/></td>
 		</tr>
 		<tr>
-			<th>Paragraph</th>
+			<th>Text</th>
 			<td><textarea name="bodyText" rows="10"></textarea></td>
 		</tr>
 		<tr>
@@ -146,7 +157,7 @@
 			</td>
 		</tr>
 		<tr>
-			<th></th>
+			<th>Paragraph</th>
 			<td>
 				<input type="button" value="remove" class="removeParagraph"/>
 				<input type="button" value="&uarr;" class="moveUp"/>
@@ -238,6 +249,13 @@ $(document).ready(function(){
 		});
 	});
 	
+	$('div.imgchg').each(function(){
+		var imgchg = $(this);
+		$(this).find('input[type=button]').click(function(){
+			imgchg.find('.fix').hide();
+			imgchg.find('.dlg').show();
+		});
+	});
 });
 
 </script>

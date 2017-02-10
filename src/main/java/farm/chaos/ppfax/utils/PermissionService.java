@@ -60,13 +60,13 @@ public class PermissionService {
 			throw new ForbiddenException();
 		}
 
-		if (!checkRole(requiredRole, ppUser.getRole())) {
+		if (!checkRole(userService, requiredRole, ppUser.getRole())) {
 			LOG.log(Level.INFO, "User has role " + ppUser.getRole() + ", but required is " + requiredRole);
 			throw new ForbiddenException();
 		}
 	}
 
-	public static boolean checkRole(UserRole requiredRole, UserRole availableRole) {
+	public static boolean checkRole(UserService userService, UserRole requiredRole, UserRole availableRole) {
 
 		switch(requiredRole) {
 		case READER:
@@ -78,7 +78,7 @@ public class PermissionService {
 		case MANAGER:
 			return (availableRole == UserRole.ADMIN || availableRole == UserRole.MANAGER);
 		case ADMIN:
-			return (availableRole == UserRole.ADMIN);
+			return (userService.isUserAdmin() || availableRole == UserRole.ADMIN);
 		}
 		return false;
 	}

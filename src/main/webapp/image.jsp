@@ -77,7 +77,7 @@
 <c:forEach items="${images}" var="image">
 
 	<tr>
-		<td><a href="/image/${image.id}">&rarr; ${image.title}</a></td>
+		<td><a href="/image/${image.id}">${image.title}</a></td>
 		<td>${image.author.name}<br><fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${image.dateCreated}" timeZone="GMT" /></td>
 		<td>${image.status}</td>
 		<td>${image.storagePath}</td>

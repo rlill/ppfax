@@ -18,6 +18,6 @@ public class ControllerUtils {
 	    request.setAttribute("googleUser", userService.getCurrentUser());
 	    PpUser ppUser = Datastore.getPpUser(userService.getCurrentUser().getEmail());
 		request.setAttribute("ppUser", ppUser);
-		request.setAttribute("admin", PermissionService.checkRole(UserRole.ADMIN, ppUser.getRole()));
+		request.setAttribute("admin", PermissionService.checkRole(userService, UserRole.ADMIN, ppUser.getRole()));
 	}
 }

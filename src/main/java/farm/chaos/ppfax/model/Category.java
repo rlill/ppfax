@@ -1,6 +1,8 @@
 package farm.chaos.ppfax.model;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.googlecode.objectify.annotation.Entity;
@@ -61,6 +63,19 @@ public class Category {
 
 	public Long getParentId() {
 		return parentId;
+	}
+
+	@JsonIgnore
+	public List<Category> getBreadcrumb() {
+		List<Category> breadcrumb = new ArrayList<>();
+		breadcrumb.add(this);
+		Long pi = parentId;
+		while (pi != null && pi != 0) {
+			Category c = Datastore.getCategory(pi);
+			breadcrumb.add(c);
+			pi = c.getParentId();
+		}
+		return breadcrumb;
 	}
 
 	public void setParentId(Long parentId) {

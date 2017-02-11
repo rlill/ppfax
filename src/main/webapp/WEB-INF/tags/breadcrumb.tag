@@ -3,10 +3,10 @@
 
 <%@ attribute name="category" required="true" type="farm.chaos.ppfax.model.Category" %>
 
-<div>
+<div class="breadcrumb">
 
 <c:forEach var="cat" items="${category.breadcrumb}">
-	<a href="${cat.path}"><c:out value="${cat.name}"/></a>
+	<b>/</b> <a href="${cat.path}"><c:out value="${cat.name}"/></a>
 </c:forEach>
 
 </div>

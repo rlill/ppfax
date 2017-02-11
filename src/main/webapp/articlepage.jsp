@@ -15,7 +15,9 @@
 
 <div class="head">
 
-	&Pi;&Pi;&Phi;&Alpha;&Xi; demo site
+	<div class="pagetitle">
+		&Pi;&Pi;&Phi;&Alpha;&Xi; demo site
+	</div>
 
 	<ppf:mainmenu/>
 
@@ -72,6 +74,16 @@
 </p>
 
 </div><%-- content --%>
+
+<div class="sidebar">
+	<c:out value="${article.category.sidebarcontent}"/>
+</div>
+
+<div class="clear"></div>
+
+<div class="footer">
+Impressum
+</div>
 
 </body>
 </html>

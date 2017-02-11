@@ -291,6 +291,7 @@ public class Datastore {
 
 	public static List<Category> getSubCategories(long parentId) {
 		LOG.log(Level.FINE, "Retrieve sub-categories of " + parentId);
+		// TODO: memcache
 		return FeederObjectifyService.ofy()
 				.load()
 				.type(Category.class)

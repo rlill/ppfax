@@ -24,6 +24,18 @@ h3 {
 div.head {
 	border: 1px solid #ddd;
 	width: 1024px;
+	height: 80px;
+	position: relative;
+}
+div.pagetitle {
+	margin: 16px 0 0 0;
+	font-size: 20pt;
+	font-weight: bold;
+	color: #046fb5;
+}
+div.mainmenu {
+	position: absolute;
+	bottom: 4px;
 }
 
 div.content {

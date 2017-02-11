@@ -67,15 +67,22 @@ public class Category {
 
 	@JsonIgnore
 	public List<Category> getBreadcrumb() {
+		// TODO: memcache
 		List<Category> breadcrumb = new ArrayList<>();
 		breadcrumb.add(this);
 		Long pi = parentId;
 		while (pi != null && pi != 0) {
 			Category c = Datastore.getCategory(pi);
-			breadcrumb.add(c);
+			breadcrumb.add(0, c);
 			pi = c.getParentId();
 		}
 		return breadcrumb;
+	}
+
+	@JsonIgnore
+	public List<Category> getSubCategories() {
+		// TODO: memcache
+		return Datastore.getSubCategories(id);
 	}
 
 	public void setParentId(Long parentId) {

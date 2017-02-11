@@ -14,7 +14,7 @@ import farm.chaos.ppfax.utils.CategoryService;
 public class Article {
 
 	@Id 	private Long id;
-			private Long categoryId;
+	@Index	private Long categoryId;
 			private Category categoryRef;
 			private String publicUri;
 			private String title;

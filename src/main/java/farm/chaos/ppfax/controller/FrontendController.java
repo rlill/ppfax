@@ -62,6 +62,7 @@ public class FrontendController extends HttpServlet {
 
 		// topic page
 		String path = requestUri;
+		LOG.log(Level.INFO, "Request URI: " + path);
 
 		// insist in trailing slash
 		if (!path.endsWith("/")) {
@@ -74,21 +75,20 @@ public class FrontendController extends HttpServlet {
 		path = path.substring(0, path.length()-1);
 		Category category = Datastore.getCategoryByPath(path);
 
-		if (category == null) {
-			response.setStatus(HttpStatus.SC_NOT_FOUND);
-			RequestDispatcher rd = request.getRequestDispatcher("/notfoundpage.jsp");
-			rd.forward(request, response);
-			return;
-		}
-
 		request.setAttribute("category", category);
-		List<Article> articles = Datastore.getArticlesInCategory(category.getId(), 0, ARTICLE_COUNT_OVERVIEW);
-		Category pcat = category;
-		while (articles.size() < ARTICLE_COUNT_OVERVIEW && pcat.getParentId() > 0) {
-			pcat = Datastore.getCategory(pcat.getParentId());
-			articles.addAll(Datastore.getArticlesInCategory(pcat.getId(), 0, ARTICLE_COUNT_OVERVIEW - articles.size()));
+		request.setAttribute("rootCategories",  Datastore.getSubCategories(0L));
+
+		if (category != null) {
+			List<Article> articles = Datastore.getArticlesInCategory(category.getId(), 0, ARTICLE_COUNT_OVERVIEW);
+			Category pcat = category;
+			while (articles.size() < ARTICLE_COUNT_OVERVIEW && pcat.getParentId() > 0) {
+				pcat = Datastore.getCategory(pcat.getParentId());
+				articles.addAll(Datastore.getArticlesInCategory(pcat.getId(), 0, ARTICLE_COUNT_OVERVIEW - articles.size()));
+			}
+			request.setAttribute("articles", articles);
 		}
-		request.setAttribute("articles", articles);
+		else
+			request.setAttribute("articles", Datastore.getArticles(0, ARTICLE_COUNT_OVERVIEW));
 
 		RequestDispatcher rd = request.getRequestDispatcher("/topicpage.jsp");
 		rd.forward(request, response);

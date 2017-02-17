@@ -2,9 +2,9 @@ package farm.chaos.ppfax.model;
 
 import java.util.Date;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
+import com.googlecode.objectify.annotation.Ignore;
 import com.googlecode.objectify.annotation.Index;
 
 import farm.chaos.ppfax.persistance.Datastore;
@@ -15,8 +15,8 @@ public class Article {
 
 	@Id 	private Long id;
 	@Index	private Long categoryId;
-			private Category categoryRef;
-			private String publicUri;
+	@Ignore private Category categoryRef;
+	@Ignore	private String publicUri;
 			private String title;
 			private String headline;
 			private String teasertext;
@@ -25,7 +25,7 @@ public class Article {
 			private Date datePublished;
 			private String keywords;
 			private Long authorId;
-			private PpUser authorRef;
+	@Ignore private PpUser authorRef;
 	@Index	private PublicationStatus status;
 
 
@@ -38,6 +38,7 @@ public class Article {
 
 	public void setId(Long id) {
 		this.id = id;
+		publicUri = null;
 	}
 
 	public Long getCategoryId() {
@@ -46,9 +47,10 @@ public class Article {
 
 	public void setCategoryId(Long categoryId) {
 		this.categoryId = categoryId;
+		publicUri = null;
+		categoryRef = null;
 	}
 
-	@JsonIgnore
 	public Category getCategory() {
 		if (categoryRef != null) return categoryRef;
 		if (categoryId == null) return null;
@@ -56,7 +58,6 @@ public class Article {
 		return categoryRef;
 	}
 
-	@JsonIgnore
 	public String getPublicUri() {
 		if (publicUri != null) return publicUri;
 		if (categoryId == null) return null;
@@ -70,6 +71,7 @@ public class Article {
 
 	public void setTitle(String title) {
 		this.title = title;
+		publicUri = null;
 	}
 
 	public String getHeadline() {
@@ -78,6 +80,7 @@ public class Article {
 
 	public void setHeadline(String headline) {
 		this.headline = headline;
+		publicUri = null;
 	}
 
 	public String getTeasertext() {
@@ -129,7 +132,6 @@ public class Article {
 		authorRef = null;
 	}
 
-	@JsonIgnore
 	public PpUser getAuthor() {
 		if (authorRef != null) return authorRef;
 		if (authorId == null) return null;

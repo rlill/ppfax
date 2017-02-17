@@ -234,10 +234,6 @@
                     <artifactId>appengine-maven-plugin</artifactId>
                     <version>${appengine.version}</version>
                     <configuration>
-                        <oauth2>false</oauth2>
-                        <additionalParams>
-                            <additionalParam>--service_account_json_key_file=/home/bamboo/flow-cron-manager/bamboo-deployment.json</additionalParam>
-                        </additionalParams>
                         <enableJarClasses>false</enableJarClasses>
                         <appId>${app.id}</appId>
                         <version>${app.version}</version>

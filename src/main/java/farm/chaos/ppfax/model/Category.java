@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
+import com.googlecode.objectify.annotation.Ignore;
 import com.googlecode.objectify.annotation.Index;
 
 import farm.chaos.ppfax.persistance.Datastore;
@@ -22,7 +22,7 @@ public class Category {
 			private Date dateCreated;
 	@Index	private Date dateModified;
 			private Long authorId;
-			private PpUser authorRef;
+	@Ignore	private PpUser authorRef;
 			private String keywords;
 	@Index	private PublicationStatus status;
 
@@ -65,7 +65,6 @@ public class Category {
 		return parentId;
 	}
 
-	@JsonIgnore
 	public List<Category> getBreadcrumb() {
 		// TODO: memcache
 		List<Category> breadcrumb = new ArrayList<>();
@@ -79,7 +78,6 @@ public class Category {
 		return breadcrumb;
 	}
 
-	@JsonIgnore
 	public List<Category> getSubCategories() {
 		// TODO: memcache
 		return Datastore.getSubCategories(id);
@@ -114,7 +112,6 @@ public class Category {
 		authorRef = null;
 	}
 
-	@JsonIgnore
 	public PpUser getAuthor() {
 		if (authorRef != null) return authorRef;
 		if (authorId == null) return null;

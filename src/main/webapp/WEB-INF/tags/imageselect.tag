@@ -51,6 +51,7 @@
 <script type="text/javascript">
 
 $(document).ready(function(){
+	// switch tabs
 	$('#${iid} div.imgdlghead ul a').click(function(){
 		$('#${iid} div.imgdlghead ul li').each(function(){
 			$(this).removeClass('active');
@@ -66,24 +67,19 @@ $(document).ready(function(){
 		return false;
 	});
 
+	// search dialog
 	$('#${iid} div.imgdlgbody.search input[type=button]').click(function(){
-
 		var searchterm = $('#${iid} div.imgdlgbody.search input[type=text]').val();
 		console.log("searchterm: " + searchterm);
 		
 		// search button
 	    $.getJSON('/api/v1/image/search/' + encodeURIComponent(searchterm), function (data) {
-
 	    	var ul = $('#${iid} div.searchresult div.vscroll').empty();
-
 	    	$.each(data, function(key, value) {
-	    	    
 	    	    var img = $('<img src="/img/2/' + value.id + '">');
 	    	    var tit = $('<p>' + value.title + '</p>');
-	    	    
 	    	    var li = $('<div class="imglistitem"></div>');
 	    	    li.append(img).append(tit);
-	    	    
 	    	    ul.append(li);
 	    	    
 	    	    // choose image
@@ -92,16 +88,14 @@ $(document).ready(function(){
 	    	    	$('#${iid} div.imgdlgbody.searchresult').find('img').css('border', 0);
 	    	    	$(this).css('border', '2px solid red');
 	    	    });
-
 	    	});
 	    	
 	    	$('#${iid} div.imgdlgbody.search').hide();
 	    	$('#${iid} div.imgdlgbody.searchresult').show();
-		
 		});
 		
 	});
-	
+	// trigger initial search
 	$('#${iid} div.imgdlgbody.search input[type=button]').click();
 
 });

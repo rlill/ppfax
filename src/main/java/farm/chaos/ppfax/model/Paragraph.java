@@ -2,9 +2,9 @@ package farm.chaos.ppfax.model;
 
 import java.util.Date;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
+import com.googlecode.objectify.annotation.Ignore;
 import com.googlecode.objectify.annotation.Index;
 
 import farm.chaos.ppfax.persistance.Datastore;
@@ -21,7 +21,7 @@ public class Paragraph {
 			private Date dateModified;
 			private ParagraphStyle style;
 			private Long imageId;
-			private Image imageRef;
+	@Ignore	private Image imageRef;
 
 	public Paragraph() {
 	}
@@ -99,7 +99,6 @@ public class Paragraph {
 		imageRef = null;
 	}
 
-	@JsonIgnore
 	public Image getImage() {
 		if (imageRef != null) return imageRef;
 		if (imageId == null || imageId == 0) return null;

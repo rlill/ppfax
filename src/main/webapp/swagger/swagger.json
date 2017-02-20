@@ -4,7 +4,7 @@
     "version" : "1.0",
     "title" : "PPFax CMS"
   },
-  "host" : "localhost:8080",
+  "host" : "ppfax-cms.appspot.com",
   "basePath" : "/api",
   "schemes" : [ "http", "https" ],
   "paths" : {
@@ -116,6 +116,9 @@
           "type" : "integer",
           "format" : "int64"
         },
+        "publicUri" : {
+          "type" : "string"
+        },
         "title" : {
           "type" : "string"
         },
@@ -147,6 +150,85 @@
         "status" : {
           "type" : "string",
           "enum" : [ "OFFLINE", "ONLINE", "DELETED" ]
+        },
+        "category" : {
+          "$ref" : "#/definitions/Category"
+        },
+        "author" : {
+          "$ref" : "#/definitions/PpUser"
+        }
+      }
+    },
+    "Category" : {
+      "type" : "object",
+      "properties" : {
+        "id" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "name" : {
+          "type" : "string"
+        },
+        "path" : {
+          "type" : "string"
+        },
+        "sidebarcontent" : {
+          "type" : "string"
+        },
+        "parentId" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "dateCreated" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "dateModified" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "authorId" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "keywords" : {
+          "type" : "string"
+        },
+        "status" : {
+          "type" : "string",
+          "enum" : [ "OFFLINE", "ONLINE", "DELETED" ]
+        },
+        "author" : {
+          "$ref" : "#/definitions/PpUser"
+        },
+        "breadcrumb" : {
+          "type" : "array"
+        },
+        "subCategories" : {
+          "type" : "array"
+        }
+      }
+    },
+    "PpUser" : {
+      "type" : "object",
+      "properties" : {
+        "id" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "email" : {
+          "type" : "string"
+        },
+        "name" : {
+          "type" : "string"
+        },
+        "role" : {
+          "type" : "string",
+          "enum" : [ "READER", "EDITOR", "MANAGER", "ADMIN" ]
+        },
+        "status" : {
+          "type" : "string",
+          "enum" : [ "REQUESTED", "ACTIVE", "REJECTED", "INACTIVE", "BLOCKED" ]
         }
       }
     }

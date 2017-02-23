@@ -3,9 +3,10 @@
 
 <%@ attribute name="index" required="true" type="java.lang.String" %>
 <%@ attribute name="value" required="false" type="java.lang.String" %>
+<%@ attribute name="ctrlid" required="false" type="java.lang.String" %>
 
 <jsp:useBean id="random" class="farm.chaos.ppfax.utils.RandomBean" scope="application" />
-<c:set var="iid" value="${random.nextId}" />
+<c:set var="iid" value="${(not empty ctrlid) ? ctrlid : random.nextId}" />
 
 <div class="imgdlg" id="${iid}">
 	<input type="hidden" name="imageId${index}" value="${value}" />
@@ -50,15 +51,15 @@
 
 <script type="text/javascript">
 
-$(document).ready(function(){
+ctrlinit = function(iid){
 	// switch tabs
-	$('#${iid} div.imgdlghead ul a').click(function(){
-		$('#${iid} div.imgdlghead ul li').each(function(){
+	$('#' + iid + ' div.imgdlghead ul a').click(function(){
+		$('#' + iid + ' div.imgdlghead ul li').each(function(){
 			$(this).removeClass('active');
 		});
 		$(this).parent().addClass('active');
 		var title = $(this).parent().attr('title');
-		$('#${iid} div.imgdlgbody').each(function(){
+		$('#' + iid + ' div.imgdlgbody').each(function(){
 			if ($(this).hasClass(title))
 				$(this).show();
 			else
@@ -68,13 +69,13 @@ $(document).ready(function(){
 	});
 
 	// search dialog
-	$('#${iid} div.imgdlgbody.search input[type=button]').click(function(){
-		var searchterm = $('#${iid} div.imgdlgbody.search input[type=text]').val();
+	$('#' + iid + ' div.imgdlgbody.search input[type=button]').click(function(){
+		var searchterm = $('#' + iid + ' div.imgdlgbody.search input[type=text]').val();
 		console.log("searchterm: " + searchterm);
 		
 		// search button
 	    $.getJSON('/api/v1/image/search/' + encodeURIComponent(searchterm), function (data) {
-	    	var ul = $('#${iid} div.searchresult div.vscroll').empty();
+	    	var ul = $('#' + iid + ' div.searchresult div.vscroll').empty();
 	    	$.each(data, function(key, value) {
 	    	    var img = $('<img src="/img/2/' + value.id + '">');
 	    	    var tit = $('<p>' + value.title + '</p>');
@@ -84,20 +85,26 @@ $(document).ready(function(){
 	    	    
 	    	    // choose image
 	    	    img.click(function(){
-	    	    	$('#${iid} input[type=hidden]').val(value.id);
-	    	    	$('#${iid} div.imgdlgbody.searchresult').find('img').css('border', 0);
-	    	    	$(this).css('border', '2px solid red');
+	    	    	$('#' + iid + ' input[type=hidden]').val(value.id);
+	    	    	$('#' + iid + ' div.imgdlgbody.searchresult').find('img').css('border', 0);
+	    	    	$(this).css('border', '2px dashed #24f');
 	    	    });
 	    	});
 	    	
-	    	$('#${iid} div.imgdlgbody.search').hide();
-	    	$('#${iid} div.imgdlgbody.searchresult').show();
+	    	$('#' + iid + ' div.imgdlgbody.search').hide();
+	    	$('#' + iid + ' div.imgdlgbody.searchresult').show();
 		});
 		
 	});
 	// trigger initial search
-	$('#${iid} div.imgdlgbody.search input[type=button]').click();
+	$('#' + iid + ' div.imgdlgbody.search input[type=button]').click();
 
+};
+
+<c:if test="${empty ctrlid}">
+$(document).ready(function(){
+	ctrlinit('${iid}')
 });
+</c:if>
 
 </script>

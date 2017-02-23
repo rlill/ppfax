@@ -139,12 +139,8 @@
 			<td><textarea name="bodyText" rows="10"></textarea></td>
 		</tr>
 		<tr>
-			<th>Image title</th>
-			<td><input type="text" name="title"></td>
-		</tr>
-		<tr>
-			<th>Image file</th>
-			<td><ppf:imageselect index="" /></td>
+			<th>Image</th>
+			<td><ppf:imageselect index="" ctrlid="IMG_TEMPLATE" /></td>
 		</tr>
 		<tr>
 			<th>Style</th>
@@ -212,9 +208,9 @@ switchElements = function(el, sw){
 }
 
 $(document).ready(function(){
-	
+
+	// add button: clone form fragemnt template
 	$('input#addParagraph').click(function(){
-		
 		topParagraphIndex++;
 		$('input#pcount').val(topParagraphIndex);
 		var editor = $('tbody#paragraphTemplate')
@@ -225,6 +221,9 @@ $(document).ready(function(){
 
 		editor.find('input[name=sequence]').val(topParagraphIndex);
 
+		var randomId = "e" + Math.floor(Math.random() * 1e8);
+		editor.find('div#IMG_TEMPLATE').attr('id', randomId)
+
 		editor.find('input,textarea,select').each(function(){
 			$(this).attr('name', $(this).attr('name') + '_' + topParagraphIndex);
 		});
@@ -234,8 +233,11 @@ $(document).ready(function(){
 		});
 			
 		editor.insertBefore($('tbody#controlRow'));
+		
+		ctrlinit(randomId);
 	});
-	
+
+	// activate move up / down, remove buttons
 	$('tbody.existingParagraph').each(function(){
 		var editor = $(this);
 		editor.find('input.removeParagraph').click(function(){
@@ -248,7 +250,8 @@ $(document).ready(function(){
 			moveParagraphDown($(this).parentsUntil('table.editor').last());
 		});
 	});
-	
+
+	// activate change image button
 	$('div.imgchg').each(function(){
 		var imgchg = $(this);
 		$(this).find('input[type=button]').click(function(){

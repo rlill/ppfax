@@ -33,6 +33,7 @@ import farm.chaos.ppfax.model.Category;
 import farm.chaos.ppfax.model.Image;
 import farm.chaos.ppfax.model.Paragraph;
 import farm.chaos.ppfax.model.PpUser;
+import farm.chaos.ppfax.model.PublicationStatus;
 import farm.chaos.ppfax.utils.StringUtils;
 
 public class Datastore {
@@ -194,10 +195,11 @@ public class Datastore {
 		return new ArrayList<>(res.values());
 	}
 
-	public static List<Article> getArticlesInCategory(Long categoryId, int offset, int limit) {
+	public static List<Article> getArticlesInCategory(Long categoryId, int offset, int limit, PublicationStatus status) {
 		LOG.log(Level.FINE, "Retrieve articles");
 		Query<Article> query = FeederObjectifyService.ofy().load().type(Article.class);
 		query = query.filter("categoryId", categoryId);
+		if (status != null) query = query.filter("status", status);
 		if (offset != 0) query = query.offset(offset);
 		if (limit != 0) query = query.limit(limit);
 		query = query.order("-dateModified");
@@ -289,14 +291,13 @@ public class Datastore {
 		return new ArrayList<>(res.values());
 	}
 
-	public static List<Category> getSubCategories(long parentId) {
+	public static List<Category> getSubCategories(long parentId, PublicationStatus status) {
 		LOG.log(Level.FINE, "Retrieve sub-categories of " + parentId);
 		// TODO: memcache
-		return FeederObjectifyService.ofy()
-				.load()
-				.type(Category.class)
-				.filter("parentId", parentId)
-				.list();
+		Query<Category> query = FeederObjectifyService.ofy().load().type(Category.class);
+		query = query.filter("parentId", parentId);
+		if (status != null) query = query.filter("status", status);
+		return query.list();
 	}
 
 	public static Category getCategory(long id) {
@@ -304,9 +305,18 @@ public class Datastore {
 		return FeederObjectifyService.ofy().load().type(Category.class).id(id).now();
 	}
 
-	public static Category getCategoryByPath(String path) {
+	public static Category getCategoryByPath(String path, PublicationStatus status) {
 		LOG.log(Level.FINE, "Retrieve category path=" + path);
-		return FeederObjectifyService.ofy().load().type(Category.class).filter("path", path).first().now();
+		Category cat = FeederObjectifyService.ofy().load().type(Category.class).filter("path", path).first().now();
+
+		if (cat == null) return null;
+		if (status == null || cat.getStatus() == status) return cat;
+		// try parent
+		while (cat.getParentId() != null && cat.getParentId() != 0) {
+			cat = getCategory(cat.getParentId());
+			if (cat.getStatus() == status) return cat;
+		}
+		return null;
 	}
 
 	public static void saveCategory(Category category) {

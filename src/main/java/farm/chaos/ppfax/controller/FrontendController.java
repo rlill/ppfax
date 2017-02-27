@@ -15,6 +15,7 @@ import org.apache.http.HttpStatus;
 
 import farm.chaos.ppfax.model.Article;
 import farm.chaos.ppfax.model.Category;
+import farm.chaos.ppfax.model.PublicationStatus;
 import farm.chaos.ppfax.persistance.Datastore;
 import farm.chaos.ppfax.utils.CategoryService;
 import farm.chaos.ppfax.utils.StringUtils;
@@ -36,7 +37,7 @@ public class FrontendController extends HttpServlet {
 
 			// article page
 			Article article = Datastore.getArticle(id);
-			if (article != null) {
+			if (article != null && article.getStatus() == PublicationStatus.ONLINE) {
 
 				String path = CategoryService.getArticlePath(article);
 				if (!path.equals(requestUri)) {
@@ -47,7 +48,7 @@ public class FrontendController extends HttpServlet {
 
 				request.setAttribute("article", article);
 				request.setAttribute("paragraphs", Datastore.getParagraphsForArticle(id));
-				request.setAttribute("rootCategories",  Datastore.getSubCategories(0L));
+				request.setAttribute("rootCategories",  Datastore.getSubCategories(0L, PublicationStatus.ONLINE));
 
 				RequestDispatcher rd = request.getRequestDispatcher("/articlepage.jsp");
 				rd.forward(request, response);
@@ -73,17 +74,24 @@ public class FrontendController extends HttpServlet {
 
 		// now cut the trailing slash
 		path = path.substring(0, path.length()-1);
-		Category category = Datastore.getCategoryByPath(path);
+		Category category = Datastore.getCategoryByPath(path, PublicationStatus.ONLINE);
+
+		// redirect if path not written correctly
+		if (category != null && !category.getPath().equals(path)) {
+			LOG.log(Level.INFO, "requestPath: " + path + ", categoryPath: " + category.getPath() + ", redirecting");
+		    response.sendRedirect(category.getPath());
+		    return;
+		}
 
 		request.setAttribute("category", category);
-		request.setAttribute("rootCategories",  Datastore.getSubCategories(0L));
+		request.setAttribute("rootCategories",  Datastore.getSubCategories(0L, PublicationStatus.ONLINE));
 
 		if (category != null) {
-			List<Article> articles = Datastore.getArticlesInCategory(category.getId(), 0, ARTICLE_COUNT_OVERVIEW);
+			List<Article> articles = Datastore.getArticlesInCategory(category.getId(), 0, ARTICLE_COUNT_OVERVIEW, PublicationStatus.ONLINE);
 			Category pcat = category;
 			while (articles.size() < ARTICLE_COUNT_OVERVIEW && pcat.getParentId() > 0) {
 				pcat = Datastore.getCategory(pcat.getParentId());
-				articles.addAll(Datastore.getArticlesInCategory(pcat.getId(), 0, ARTICLE_COUNT_OVERVIEW - articles.size()));
+				articles.addAll(Datastore.getArticlesInCategory(pcat.getId(), 0, ARTICLE_COUNT_OVERVIEW - articles.size(), PublicationStatus.ONLINE));
 			}
 			request.setAttribute("articles", articles);
 		}

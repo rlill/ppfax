@@ -69,7 +69,7 @@ public class CategoryService {
 
 	public static void fixSubcategoryPaths(long categoryId) {
 		LOG.log(Level.INFO, "Fix paths for subcategories of " + categoryId);
-		for (Category subcat : Datastore.getSubCategories(categoryId)) {
+		for (Category subcat : Datastore.getSubCategories(categoryId, null)) {
 			String newPath = getCategoryPath(subcat);
 			if (!newPath.equals(subcat.getPath())) {
 				subcat.setPath(newPath);

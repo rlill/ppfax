@@ -22,10 +22,10 @@ h3 {
 }
 
 div.head {
-	border: 1px solid #ddd;
 	width: 1024px;
 	height: 80px;
 	position: relative;
+	background-color: #eee;
 }
 div.pagetitle {
 	margin: 16px 0 0 0;
@@ -39,26 +39,21 @@ div.mainmenu {
 }
 
 div.content {
-	border: 1px solid #ddd;
 	width: 800px;
 	float: left;
 }
 
 div.sidebar {
-	border: 1px solid #ddd;
 	width: 224px;
 	float: left;
 }
 
 div.footer {
-	border: 1px solid #ddd;
 	width: 1024px;
-	float: left;
+	background-color: #eee;
 }
 
-
 div.content div {
-	border: 1px solid red;
 	padding: 10px;
 }
 

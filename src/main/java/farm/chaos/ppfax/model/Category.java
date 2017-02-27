@@ -80,7 +80,7 @@ public class Category {
 
 	public List<Category> getSubCategories() {
 		// TODO: memcache
-		return Datastore.getSubCategories(id);
+		return Datastore.getSubCategories(id, PublicationStatus.ONLINE);
 	}
 
 	public void setParentId(Long parentId) {

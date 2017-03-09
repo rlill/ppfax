@@ -9,7 +9,7 @@
 <c:set var="iid" value="${(not empty ctrlid) ? ctrlid : random.nextId}" />
 
 <div class="imgdlg" id="${iid}">
-	<input type="hidden" name="imageId${index}" value="${value}" />
+	<input type="hidden" class="imgdlg-res-id" name="imageId${index}" value="${value}" />
 	<div class="imgdlghead">
 		<ul>
 			<li title="search" class="active"><a class="tabhead" href="#">Search</a></li>
@@ -34,6 +34,7 @@
 	<!-- 
 		<form action="/image" method="POST" enctype="multipart/form-data">
 		<input type="hidden" name="resultformat" value="imgdlg"/>
+		<input type="hidden" name="inputId" value="##INPUTID##"/>
 		<input type="hidden" name="status" value="ONLINE"/>
 		<table>
 			<tr><td>
@@ -93,7 +94,7 @@ ctrlinit = function(iid){
 	    	    
 	    	    // choose image
 	    	    img.click(function(){
-	    	    	$('#' + iid + ' input[type=hidden]').val(value.id);
+	    	    	$('#' + iid + ' input.imgdlg-res-id').val(value.id);
 	    	    	$('#' + iid + ' div.imgdlgbody.searchresult').find('img').css('border', 0);
 	    	    	$(this).css('border', '2px dashed #24f');
 	    	    });
@@ -112,6 +113,7 @@ ctrlinit = function(iid){
 	$('#' + iid + ' div.imgdlgbody.upload iframe').contents().find('head').html(stylesheet);
 	var content = $('#' + iid + ' div.imgdlgbody.upload').html();
 	var uploadform = content.match(/<!--([\s\S]*?)-->/m)[1];
+	uploadform = uploadform.replace('##INPUTID##', iid);
 	$('#' + iid + ' div.imgdlgbody.upload iframe').contents().find('body').html(uploadform);
 
 };

@@ -134,9 +134,17 @@ public class ImageController extends HttpServlet {
 				image.setAuthorId(user.getId());
 		    	LOG.log(Level.INFO, "Create " + image);
 		    	Datastore.saveImage(image);
+
+		    	String resultformat = postParameters.get("resultformat");
+		    	LOG.log(Level.INFO, "resultformat: " + resultformat);
+		    	if (resultformat != null && resultformat.equals("imgdlg")) {
+		    		request.setAttribute("imgsrc", "/img/2/" + image.getId());
+		    		RequestDispatcher rd = request.getRequestDispatcher("/imgdlg.jsp");
+		    		rd.forward(request, response);
+		    		return;
+		    	}
 	        }
 	    }
-
 
 	    response.sendRedirect("/image");
 	}

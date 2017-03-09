@@ -128,6 +128,11 @@ div.imgdlghead ul li.active a {
 div.imgdlgbody table th {
 	width: 70px;
 }
+div.imgdlgbody.upload iframe {
+	width: 100%;
+	height: 100%;
+	border: 0;
+}
 
 div.vscroll {
 	overflow-y: scroll;

@@ -30,15 +30,23 @@
 		<div class="vscroll"></div>
 	</div>
 	<div class="imgdlgbody upload" style="display:none">
+		<iframe src="about:blank"></iframe>
+	<!-- 
+		<form action="/image" method="POST" enctype="multipart/form-data">
+		<input type="hidden" name="resultformat" value="imgdlg"/>
+		<input type="hidden" name="status" value="ONLINE"/>
 		<table>
-		<tr><td>
-			Title: <input type="text"/>
-		</td><th>
-			<input type="button" value="upload"/>
-		</th></tr>
-		<tr><td>
-			<input type="file" value="file"/>
-		</td></tr></table>
+			<tr><td>
+				Title: <input type="text" name="title"/>
+			</td><th>
+				<input type="submit" value="upload"/>
+			</th></tr>
+			<tr><td>
+				<input type="file" name="file"/>
+			</td></tr>
+		</table>
+		</form>
+	 -->
 	</div>
 	<div class="imgdlgbody download" style="display:none">
 		<table><tr><td>
@@ -94,10 +102,17 @@ ctrlinit = function(iid){
 	    	$('#' + iid + ' div.imgdlgbody.search').hide();
 	    	$('#' + iid + ' div.imgdlgbody.searchresult').show();
 		});
-		
 	});
+	
 	// trigger initial search
 	$('#' + iid + ' div.imgdlgbody.search input[type=button]').click();
+
+	// upload dialog
+	var stylesheet=$('<link rel="stylesheet" type="text/css" href="/ppfax.css" />');
+	$('#' + iid + ' div.imgdlgbody.upload iframe').contents().find('head').html(stylesheet);
+	var content = $('#' + iid + ' div.imgdlgbody.upload').html();
+	var uploadform = content.match(/<!--([\s\S]*?)-->/m)[1];
+	$('#' + iid + ' div.imgdlgbody.upload iframe').contents().find('body').html(uploadform);
 
 };
 

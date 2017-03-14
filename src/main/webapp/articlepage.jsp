@@ -40,7 +40,8 @@
 	<c:when test="${paragraph.style eq 'WIDE_IMAGE'}">
 
 		<c:if test="${not empty paragraph.image}">
-			<img src="/img/6/${paragraph.image.id}"/>
+			<c:set var="alt"><c:out value="${paragraph.image.title}"/></c:set>
+			<img src="/img/6/${paragraph.image.id}" alt="${alt}"/>
 		</c:if>
 
 		<p><c:out value="${paragraph.bodyText}"/></p>
@@ -50,7 +51,8 @@
 
 		<p>
 			<c:if test="${not empty paragraph.image}">
-				<img src="/img/4/${paragraph.image.id}" align="left"/>
+				<c:set var="alt"><c:out value="${paragraph.image.title}"/></c:set>
+				<img src="/img/4/${paragraph.image.id}" align="left" alt="${alt}"/>
 			</c:if>
 			<c:out value="${paragraph.bodyText}"/>
 		</p>
@@ -60,7 +62,8 @@
 
 		<p>
 			<c:if test="${not empty paragraph.image}">
-				<img src="/img/4/${paragraph.image.id}" align="right"/>
+				<c:set var="alt"><c:out value="${paragraph.image.title}"/></c:set>
+				<img src="/img/4/${paragraph.image.id}" align="right" alt="${alt}"/>
 			</c:if>
 			<c:out value="${paragraph.bodyText}"/>
 		</p>

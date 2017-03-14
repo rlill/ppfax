@@ -86,7 +86,7 @@ ctrlinit = function(iid){
 	    $.getJSON('/api/v1/image/search/' + encodeURIComponent(searchterm), function (data) {
 	    	var ul = $('#' + iid + ' div.searchresult div.vscroll').empty();
 	    	$.each(data, function(key, value) {
-	    	    var img = $('<img src="/img/2/' + value.id + '">');
+	    	    var img = $('<img src="/img/2/' + value.id + '"/>');
 	    	    var tit = $('<p>' + value.title + '</p>');
 	    	    var li = $('<div class="imglistitem"></div>');
 	    	    li.append(img).append(tit);

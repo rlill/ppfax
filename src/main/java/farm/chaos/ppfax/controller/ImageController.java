@@ -139,6 +139,7 @@ public class ImageController extends HttpServlet {
 		    	LOG.log(Level.INFO, "resultformat: " + resultformat);
 		    	if (resultformat != null && resultformat.equals("imgdlg")) {
 		    		request.setAttribute("imageId", image.getId());
+		    		request.setAttribute("title", image.getTitle());
 		    		request.setAttribute("inputId", postParameters.get("inputId"));
 		    		RequestDispatcher rd = request.getRequestDispatcher("/imgdlg.jsp");
 		    		rd.forward(request, response);

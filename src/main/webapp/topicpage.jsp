@@ -22,6 +22,8 @@
 
 </div>
 
+<div class="body">
+
 <div class="content">
 
 <c:if test="${not empty category}">
@@ -43,7 +45,6 @@
 
 </div><%-- content --%>
 
-
 <div class="sidebar">
 	<c:if test="${not empty category}">
 		<c:out value="${category.sidebarcontent}"/>
@@ -51,6 +52,8 @@
 </div>
 
 <div class="clear"></div>
+
+</div><%-- body --%>
 
 <div class="footer">
 Impressum

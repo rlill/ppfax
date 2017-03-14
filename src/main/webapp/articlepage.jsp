@@ -23,6 +23,8 @@
 
 </div>
 
+<div class="body">
+
 <div class="content">
 <ppf:breadcrumb category="${article.category}"/>
 
@@ -80,6 +82,8 @@
 </div>
 
 <div class="clear"></div>
+
+</div><%-- body --%>
 
 <div class="footer">
 Impressum

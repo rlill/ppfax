@@ -143,6 +143,7 @@ div.vscroll div.imglistitem {
     padding: 3px;
 	width: 100px;
 	float: left;
+	height: 100px;
 }
 
 table.editor th {

@@ -38,6 +38,10 @@ div.mainmenu {
 	bottom: 4px;
 }
 
+div.body {
+	width: 1024px;
+}
+
 div.content {
 	width: 800px;
 	float: left;
